@@ -1,0 +1,82 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_OfferDetail>
+
+@{
+    ViewBag.Title = "Teklif Detay Ön İzleme";
+    Layout = "~/Views/Shared/_RequestLayout.cshtml";
+}
+
+<h2>Teklif Detayları </h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Malzeme
+        </th>
+        <th>
+            Miktar
+        </th>
+        <th>
+            Birim
+        </th>
+        <th>
+            Bölge
+        </th>
+        @if (!Model.ToList()[0].isDeliveryAddress)
+        {
+            <th>
+
+            </th>
+        }
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department)
+            </td>
+            @if (!Model.ToList()[0].isDeliveryAddress)
+            {
+                <td>
+                    
+                    <button type="button" style="margin-top:0px;margin-right:5px" data-target="#ModalAddressInfo_@item.Sicil" data-toggle="modal" class="btn btn-rounded  btn-danger pull-right"><i class="fa fa-address-book adminpro-informatio" aria-hidden="true"></i> Adres Detay </button>
+
+
+
+
+                    <div id="ModalAddressInfo_@item.Sicil" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-close-area modal-close-df">
+                                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                </div>
+                                <div class="modal-body">
+                                    <br />
+                                    <br />
+                                    @item.Address <br />
+                                    <br />
+                                    Telefon : @item.Telephone
+                                    <br /> <br />
+                                </div>
+                                <div class="modal-footer">
+                                    <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-close adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            }
+        </tr>
+    }
+</table>

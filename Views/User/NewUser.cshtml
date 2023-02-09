@@ -1,0 +1,127 @@
+﻿@model netline.purchaseoffer.Models.Ntl_User
+
+@{
+    ViewBag.Title = "Yeni Kullanıcı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#UserType").change(function() {
+       var userType=$("#UserType").val();
+        if (userType==="1") {
+             $('#divUserType').removeClass("hidden");
+
+        } else {
+
+     $('#divUserType').addClass("hidden");
+        }
+    });
+
+});
+</script>
+<h2>@Model.FullName</h2>
+<div class="col-lg-12">
+    <div class="col-lg-4">
+        @Html.ActionLink("Listeye Git", "Index", null, new { @class = "btn btn-primary pull-right" })
+    </div>
+</div>
+@using (Html.BeginForm("NewUser", "User", FormMethod.Post, new { @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-lg-4">
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("lblUserName", "Kullanıcı Adı ", htmlAttributes: new { @class = "control-label col-md-4", @autocomplete = "off" })
+                <div class="col-md-8">
+
+
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("lblPassword", "Şifre ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "Password", @autocomplete = "off" } })
+
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("lblEmail", "E-Posta ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("lblFullName", "Ad Soyad ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                </div>
+            </div><div class="form-group">
+                @Html.Label("lblFullName", "Analiz Boyutu Kodu ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.AnlyCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("lblUserType", "Kullanıcı Türü ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.UserType, new SelectList(ViewBag.UserTypelist, "Value", "Text", Model.UserType), "Seçiniz", new { @class = "form-control", @style = "font-weight: bold !Important;", @onchange = "ChangedTransferType()" })
+
+                </div>
+            </div>
+
+            <div id="divUserType" class="hidden">
+                <div class="form-group">
+                    @Html.Label("lblUserType", "İhtiyaç Talepleri ", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <div class="form-group-inner">
+                            <div class="bt-df-checkbox ">
+                                <div class="i-checks">
+                                    <label>
+                                        @Html.CheckBoxFor(model => model.RequirementDemand, new { @class = "styled", @type = "checkbox" })
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("lblUserType", "Bütçe ", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <div class="form-group-inner">
+                            <div class="bt-df-checkbox ">
+                                <div class="i-checks">
+                                    <label>
+                                        @Html.CheckBoxFor(model => model.Budget, new { @class = "styled", @type = "checkbox" })
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 ">
+                    <button type="submit" value="Kaydet" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+

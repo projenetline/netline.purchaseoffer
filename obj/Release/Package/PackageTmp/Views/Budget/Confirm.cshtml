@@ -1,0 +1,538 @@
+﻿@model netline.purchaseoffer.Models.Ntl_Request
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Onayla";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    netline.purchaseoffer.BusinessLayer.ProjectUtil util= new netline.purchaseoffer.BusinessLayer.ProjectUtil();
+    List<netline.purchaseoffer.Models.Ntl_OfferLine> Lines = util.getProjectLines(Model.ProjectId);
+    List<netline.purchaseoffer.Models.Ntl_Comment>  comments = util.getCommentsByProjectId(Model.ProjectId);
+    string confirmId=@Request.QueryString["ConfirmId"].ToString();
+    int SuggestionSupplier=util.getSuggestionSupplier(Model.ProjectId);
+    netline.purchaseoffer.Models.Ntl_Confirm _Confirm= util.getConfirmByGuid(confirmId);
+    string explanation_=util.getProjectExp(Model.ProjectId);
+    string projectNo=util.getProjeNo(Model.ProjectId);
+    netline.purchaseoffer.Models.Ntl_User user= (netline.purchaseoffer.Models.Ntl_User )Session["User"];
+}
+
+<style>
+    .container {
+        max-width: 820px;
+        margin: 0px auto;
+        margin-top: 50px;
+    }
+
+    .comment {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .commenter {
+        float: left;
+    }
+
+        .commenter img {
+            width: 35px;
+            height: 35px;
+        }
+
+    .comment-text-area {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .textinput {
+        float: left;
+        width: 100%;
+        min-height: 75px;
+        outline: none;
+        resize: none;
+        border: 1px solid grey;
+    }
+</style>
+<script type="text/javascript">
+ $(document).ready(function () {
+    getConfirmProjectStatus();
+ });
+
+</script>
+<div class="col-lg-5 row" style="margin-bottom:10px">
+    <label class="control-label col-lg-2" style="margin-top: 10px">Proje No</label>
+    @Html.TextBox("txtProjectNr", @projectNo, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+</div>
+<div class="col-lg-12" style="margin-bottom:10px">
+
+    <table id="OfferLineTable" ststyle="padding:2px;width:100%" border="1">
+        <thead>
+            <tr>
+                <td colspan="3" style="font-weight:bolder" align="center">Ürünler</td>
+                <td colspan="4" style="font-weight:bolder" align="center"> Son Satın Alma Fiyatları</td>
+            </tr>
+            <tr>
+                <td style="width:6%">Talep No</td>
+                <td style="width:9%">Talep Eden</td>
+                <td style="width:10%">Grup Kodu</td>
+                <td style="width:15%">Malzeme Açıklaması</td>
+                <td style="width:30%">Malzeme Açıklaması</td>
+                <td align="center"> Miktar</td>
+                <td>Birim </td>
+                <td align="center"> KDV Hariç Birim Fiyatı</td>
+                <td align="center"> KDV Hariç Toplam Tutar </td>
+                <td align="center">Kdv Oranı %  </td>
+                <td align="center">KDV Dahil Toplam Tutar</td>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+            @{ double sumNetTotal=0; double sumTotal=0; }
+            @for (int i = 0; i < Lines.Count; i++)
+            {
+
+                sumNetTotal += @Lines[i].NetTotal;
+                sumTotal += @Lines[i].Total;
+                <tr>
+                    @Html.TextBoxFor(model => Lines[i].ItemRef, new { @class = "form-control hidden", @type = "text" })
+
+                    @for (int j = 0; j < Lines[i].TransRef.Count; j++)
+                    {
+                        @Html.TextBoxFor(model => Lines[i].TransRef[j], new { @class = "form-control hidden", @type = "text" })
+
+                    }
+
+
+                    <td>
+
+                        @Html.TextBoxFor(model => Lines[i].SlipNr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => Lines[i].PersonName, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => Lines[i].ItemGrpCode, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => Lines[i].ItemDesc, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                    </td>
+                    <td align="right">
+                        @Html.TextBoxFor(model => Lines[i].Quantity, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => Lines[i].Unit, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                    </td>
+                    <td align="right">
+
+                        @Html.TextBoxFor(model => Lines[i].LastPurchPrice, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+                    </td>
+                    <td align="right">
+
+                        @Html.TextBoxFor(model => Lines[i].Total, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+                    </td>
+                    <td align="right">
+
+                        @Html.TextBoxFor(model => Lines[i].VatRate, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+                    </td>
+                    <td align="right">
+                        @Html.TextBoxFor(model => Lines[i].NetTotal, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+                    </td>
+                </tr>
+
+            }
+            <tr>
+                <td colspan="10" style="height:10px;background-color:lightgray"></td>
+            </tr>
+            <tr style="font-size:18px;background-color:lightyellow">
+                <td colspan="7" style="border-bottom:0 solid transparent !important;text-align:right;font-weight:bold"> Genel Toplam</td>
+                <td style="font-weight:bold;text-align:right">@sumTotal.ToString("N2")</td>
+                <td style="font-weight:bold;text-align:right"></td>
+                <td style="font-weight:bold;text-align:right">@sumNetTotal.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th></th>
+                            <th width="40%">
+                                Tedarikçi Firma
+                            </th>
+                            <th align="center">
+                                Teklif No
+                            </th>
+                            <th width="15%">
+                                Toplam Tutar
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th colspan="5" style="background-color:lightgreen"> Önerilen Teklif / Tedarikçi</th>
+
+
+                        </tr>
+                        @{
+
+                            int count=0;
+                            var ntl_request =Model.RequestSuppliers.Where(x => x.Supplier.SupplierRef ==SuggestionSupplier).FirstOrDefault();
+                        }
+                        <tr>
+
+                            <td style="background-color:lightgreen">
+                                <button role="button" onclick="openAWindow('Demands/SupplierOfferDetail?ProjectId=@Model.ProjectId&OfferNr=@ntl_request.RequestNr&supplierRef=@ntl_request.SupplierRef', 'Teklif Detayı' , 920, 640, true)" class="btn btn-default pull-right"><i class="fa fa-search"></i>Detay</button>
+
+
+                            </td>
+
+                            <td style="background-color:lightgreen">
+                                @Html.TextBoxFor(model => ntl_request.Supplier.SupplierDesc, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:left" })
+
+                            </td>
+                            <td style="background-color:lightgreen">
+                                @Html.TextBoxFor(model => ntl_request.RequestNr, "{0:N0}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:center" })
+
+                            </td>
+                            <td style="background-color:lightgreen">
+                                @Html.TextBoxFor(model => ntl_request.NetTotal, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+                            </td>
+                            <td align="center" style="background-color:lightgreen">
+                                @if (ntl_request.BudgetControl)
+                                {
+                                    <a style="margin-top:0px;background-color:green" class="btn btn-rounded  btn-success disabled"><i class="fa fa-check adminpro-informatio" aria-hidden="true"></i> </a>
+                                }
+                                else
+                                {
+                                    <a style="margin-top:0px;background-color:red" class="btn btn-rounded  btn-danger disabled"><i class="fa fa-remove adminpro-informatio" aria-hidden="true"></i> </a>
+                                }
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th colspan="4">Diğer Teklif / Tedarikçiler</th>
+
+
+                        </tr>
+
+                    </table>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-lg-12">
+                                <table class="table table-no-bordered">
+                                    @foreach (var Budget in Model.Budgets)
+                                    {
+
+                                        <thead>
+                                            <tr>
+                                                <td colspan="5" align="center">@Budget.BudgetName </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td></td>
+                                                <td>Planlanan </td>
+                                                <td>Gerçekleşen</td>
+                                                <td>Bloke</td>
+                                                <td>Kalan</td>
+
+                                            </tr>
+
+                                        </thead>
+
+
+
+                                        <tbody>
+                                            @{
+
+                                                bool iscontract=false;
+
+                                                for (int i = 0; i < Lines.Count; i++)
+                                                {
+                                                    iscontract = Lines[i].isContract;
+                                                }
+
+                                                double netAylik= @Budget.Budget - @Budget.Gerceklesen - @Budget.BlokeAmount;
+
+                                                double netYillik= @Budget.BudgetYear- Budget.GerceklesenYear - @Budget.YillikBlokeAmount;
+
+                                            }
+
+                                            @if (Budget.BudgetYillik)
+                                            {
+
+                                                <tr>
+
+                                                    <td width="15%" align="left">Aylık</td>
+
+                                                    <td width="17%" align="left">@Budget.Budget.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@Budget.Gerceklesen.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@Budget.BlokeAmount.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@netAylik.ToString("n2")</td>
+
+                                                </tr>
+                                            }
+                                            else
+                                            {
+
+                                                if (Budget.BudgetOk)
+                                                {
+
+                                                    <tr style=" border-bottom:4px solid gray;background-color:lightgreen">
+
+                                                        <td width="15%" align="left">Aylık</td>
+
+                                                        <td width="17%" align="left">@Budget.Budget.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.Gerceklesen.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.BlokeAmount.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@netAylik.ToString("n2")</td>
+
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    <tr style=" border-bottom:4px solid gray;background-color:coral">
+
+                                                        <td width="15%" align="left">Aylık</td>
+
+                                                        <td width="17%" align="left">@Budget.Budget.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.Gerceklesen.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.BlokeAmount.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@netAylik.ToString("n2")</td>
+
+                                                    </tr>
+
+                                                }
+
+
+                                            }
+                                            @if (Budget.BudgetYillik)
+                                            {
+                                                if (Budget.BudgetOk)
+                                                {
+
+                                                    <tr style=" border-bottom:4px double gray;background-color:lightgreen">
+
+
+                                                        <td width="10%" align="left">Yıllık</td>
+
+                                                        <td width="17%" align="left">@Budget.BudgetYear.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.GerceklesenYear.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.YillikBlokeAmount.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@netYillik.ToString("n2")</td>
+
+
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    <tr style=" border-bottom:4px double gray;background-color:coral">
+
+
+                                                        <td width="10%" align="left">Yıllık</td>
+
+                                                        <td width="17%" align="left">@Budget.BudgetYear.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.GerceklesenYear.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@Budget.YillikBlokeAmount.ToString("n2")</td>
+
+                                                        <td width="17%" align="left">@netYillik.ToString("n2")</td>
+
+
+                                                    </tr>
+
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <tr style=" border-bottom:4px double gray">
+
+
+                                                    <td width="10%" align="left">Yıllık</td>
+
+                                                    <td width="17%" align="left">@Budget.BudgetYear.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@Budget.GerceklesenYear.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@Budget.YillikBlokeAmount.ToString("n2")</td>
+
+                                                    <td width="17%" align="left">@netYillik.ToString("n2")</td>
+
+
+                                                </tr>
+                                            }
+
+
+                                        </tbody>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 comment" style="border:3px solid gray;background-color:#f2f0f0;margin-bottom:2px">
+                                @Html.Label("lblComment", "Açıklama", new { @class = "control-label col-md-12" })
+                                @Html.TextArea("txtProjectExplanation", @explanation_, new { @cols = "100", @rows = "5", @style = "@width:100%;background-color:#faf8f8", @readonly = "readonly", @class = "textinput" })
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <button data-target="#ModalPayPlan" data-toggle="modal" onclick="getPayPlan(@Model.ProjectId)" style="margin-top:0px;" class="btn btn-rounded  btn-warning btn-lg pull-right">
+            <i class="fa fa-money"></i>  Ödeme Planı
+        </button>
+
+        <div id="ModalPayPlan" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-close-area modal-close-df">
+                        <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel " style="padding:5px;margin-top:25px;height:480px">
+                            <div class="form-horizontal">
+
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">1.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari1", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">2.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari2", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">3.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari3", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">4.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari4", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">5.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari5", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label style="text-align:right;padding-top:8px" class=" col-lg-2">6.Yıl</label>
+                                    <div class="col-lg-6">
+                                        @Html.TextBox("txtOdemeTutari6", 0, "{0:N2}", new { @class = "form-control", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12">
+                @if (_Confirm.ConfirmStatus == 0)
+                {
+                    <h3 style="color:lightcoral"> Teklif hakkında onayınız bekleniyor. </h3>
+                }
+                else
+                {
+                    <label style="font-size:20px;width:100px;margin-bottom:5px" class="label label-info  " id="lblProjectStatus"> Bekleniyor</label>
+                }
+                @if (_Confirm.ConfirmStatus == 0)
+                {
+                    <div class="col-md-12 comment" style="border:3px solid gray;background-color:#f2f0f0;margin-bottom:2px">
+                        Yorum Yaz
+                        @Html.TextArea("txtYourComment", "", new { @cols = "100", @rows = "5", @style = "@width:100%;background-color:white", @class = "textinput" })
+                        <button role="button" onclick="saveUnConfirm('@confirmId')" style="padding:2px; margin-bottom:2px;margin-right:5px" class="btn btn-danger pull-right"><i class="fa fa-save"></i>  Onaylamadan Geri Gönder</button>
+                        <button role="button" onclick="saveConfirm('@confirmId')" style="padding:2px; margin-bottom:2px;margin-right:5px" class="btn btn-success pull-right"><i class="fa fa-save"></i>  Onayla ve Kaydet</button>
+
+                    </div>
+
+                }
+            </div>            <div class="col-lg-12" style="margin-top:15px">
+                <h2 class="panel-title">
+                    @if (comments.Count > 0)
+                    {
+                        <a style="margin-top:0px;" class="btn btn-rounded  btn-info " data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
+                            <i class="fa fa-comment"></i>  Yorumlar
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="margin-top:0px;" class="btn btn-rounded  btn-info  disabled" data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
+                            <i class="fa fa-comment"></i>  Yorumlar
+                        </a>
+                    }
+
+
+                </h2>
+
+
+                <div id="collapse4" class="panel-collapse panel-ic collapse ">
+                    <div class="panel-body admin-panel-content animated flash">
+                        @foreach (var comment in comments)
+                        {
+
+                            string commentInfo=comment.PersonName + " ( "+ comment.CommentTime.ToShortDateString() + " " + comment.CommentTime.ToShortTimeString()+" ) " ;
+                            <div class="col-md-12 comment" style="border:3px solid gray;background-color:#f2f0f0;margin-bottom:2px">
+                                @Html.Label("lblComment", commentInfo, new { @class = "control-label col-md-12" })
+                                @Html.TextArea("Comments", comment.CommentStr, new { @cols = "100", @rows = "5", @style = "@width:100%;background-color:#faf8f8", @readonly = "readonly", @class = "textinput" })
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+

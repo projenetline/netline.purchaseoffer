@@ -1,0 +1,218 @@
+﻿@model netline.purchaseoffer.Models.Ntl_Offer
+@using System;
+
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    /**/
+
+    ViewBag.Title = "Teklif Detay";
+    Layout = "~/Views/Shared/_RequestLayout.cshtml";
+
+
+
+}
+
+<h2>
+    @Model.OfferNr . Teklif
+
+</h2>
+
+<table id="OfferLineTable" style="padding:2px " border="1">
+    <thead>
+        <tr>
+
+            <td rowspan="2" style="max-width:200px;min-width:200px;text-align:center">Malzeme Açıklaması</td>
+            <td rowspan="2" style="max-width:75px;min-width:75px;text-align:center">Birim </td>
+            <td rowspan="2" style="max-width:75px;min-width:75px;text-align:center"> Miktar</td>
+
+            @foreach (var supp in Model.Suppliers)
+            {
+
+                if (@supp.SupplierDesc.Length > 40)
+                {
+                    <td colspan="3" align="center"> @supp.SupplierDesc.Substring(0, 40) ...  </td>
+                }
+                else
+                {
+                    <td colspan="3" align="center"> @supp.SupplierDesc  </td>
+                }
+
+            }
+
+
+        </tr>
+        <tr>
+            @foreach (var supp in Model.Suppliers)
+            {
+
+
+                <td style="font-size:12px;text-align:center;max-width:120px;min-width:120px "> Kdv Hariç<br />Birim Fiyat</td>
+                <td style=" font-size: 12px;text-align: center;max-width:120px;min-width:120px "> Kdv Hariç<br /> Toplam Tutar</td>
+                <td style="font-size:12px;text-align:center;max-width:120px;min-width:120px ">Kdv Hariç Toplam Tutar(TL Cinsinden)</td>
+            }
+
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @for (int i = 0; i < Model.Lines.Count; i++)
+        {
+
+            <tr>
+                @Html.TextBoxFor(model => @Model.Lines[i].ItemRef, new { @class = "form-control hidden", @type = "text" })
+
+                @for (int j = 0; j < @Model.Lines[i].TransRef.Count; j++)
+                {
+                    @Html.TextBoxFor(model => @Model.Lines[i].TransRef[j], new { @class = "form-control hidden", @type = "text" })
+
+                }
+                <td style="text-align:center">
+                    @Html.TextBoxFor(model => @Model.Lines[i].ItemDesc, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important;text-align:center" })
+                </td>
+                <td style="text-align:center">
+                    @Html.TextBoxFor(model => @Model.Lines[i].Unit, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important;text-align:center" })
+                </td>
+                <td align="right">
+                    @Html.TextBoxFor(model => @Model.Lines[i].Quantity, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                </td>
+
+
+
+                @foreach (var price in @Model.Lines[i].Priceses)
+                {
+                    if (price.TrRate == 0)
+                    {
+                        price.TrRate = 1;
+                    }
+
+                    double trnet=price.TrRate*price.Price*Model.Lines[i].Quantity;
+                    string trCurStr="";
+                    if (price.TrCurr == 1)
+                    {
+                        trCurStr = " USD";
+                    }
+                    else if (price.TrCurr == 20)
+                    {
+                        trCurStr = " EUR";
+                    }
+                    else
+                    {
+                        trCurStr = " TL";
+                    }
+                    if (string.IsNullOrEmpty(price.Explanation))
+                    {
+                        if (price.Price == 0)
+                        {
+
+                            <td align="right">
+
+                                @Html.TextBoxFor(model => price.Price, "{0:N4} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right;background-color:red;color:white" })
+
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => price.TrNet, "{0:N2} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right;text-align:right;background-color:red;color:white" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => trnet, "{0:N2} TL", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right;text-align:right;background-color:red;color:white" })
+                            </td>
+
+
+
+                        }
+                        else
+                        {
+                            <td align="right">
+
+                                @Html.TextBoxFor(model => price.Price, "{0:N4} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+
+
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => price.TrNet, "{0:N2} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => trnet, "{0:N2} TL", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+
+                        }
+                    }
+                    else
+                    {
+                        <td align="right">
+                            <button data-target="#ModalSupplierExplanation" data-toggle="modal" type="button" style="font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" class="btn btn-warning"> @price.Price.ToString("N2") TL</button>
+                            <div id="ModalSupplierExplanation" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-close-area modal-close-df">
+                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                        </div>
+                                        <div class="modal-body">
+                                            <br />
+
+                                            <br />
+                                            <h2>Tedarikçi Açıklaması</h2>
+                                            <br />
+                                            @price.Explanation
+                                            <br /> <br />
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" class="btn btn-rounded  btn-info"><i class="fa fa-check-square adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        if (price.Price == 0)
+                        {
+                            <td align="right">
+                                @Html.TextBoxFor(model => price.TrNet, "{0:N2} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right;background-color:red;color:white" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => trnet, "{0:N2} TL", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right;background-color:red;color:white" })
+                            </td>
+                        }
+                        else
+                        {
+
+                            <td align="right">
+                                @Html.TextBoxFor(model => price.TrNet, "{0:N2} " + @trCurStr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => trnet, "{0:N2} TL", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                        }
+                    }
+
+
+                }
+            </tr>
+
+        }
+
+        @{ int totalcolspan= (Model.Suppliers.Count*3)+3;}
+        <tr>
+            <td colspan="@totalcolspan" style="        height: 10px;
+        background-color: lightgray"></td>
+        </tr>
+        <tr style="font-size: 18px;
+        background-color: lightyellow
+    ">
+            <td colspan="3" style="        border-bottom: 0 solid transparent !important;
+        text-align: right;
+        font-weight: bold">
+                Genel Toplam
+            </td>
+            @foreach (var supp in Model.Suppliers)
+            {
+
+                <td colspan="3" style="font-weight:bold;text-align:right">@supp.NetTotals[@Model.OfferNr - 1].NetTotalWithoutTax.ToString("N2")</td>
+
+            }
+
+        </tr>
+
+    </tbody>
+</table>

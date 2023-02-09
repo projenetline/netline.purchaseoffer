@@ -1,0 +1,7 @@
+vpn user : netline
+şifre : 11qqaaZZ
+
+server user : Aba.local\netline
+şifre : 11qqaaZZ
+
+server ip : 192.168.1.10

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE config SYSTEM "../Grammar/Config.dtd" >
+<config service-address="http://localhost:9180/lbssitemanager/webservices/ConfiguratorService" on-error="stop" model="sitemanager"> 
+    <file name="DomainConfig.xml" overwrite="true"/> 
+    <file name="ConsoleConfig.xml" overwrite="true"/> 
+    <file name="DBConnection.xml" overwrite="true"/> 
+    <file name="Debug.xml" overwrite="false"/> 
+    <file name="EncryptionConfig.xml" overwrite="false"/> 
+    <file name="MsSqlConfig.xml" overwrite="false"/> 
+    <file name="MySqlConfig.xml" overwrite="false"/> 
+    <file name="OraConfig.xml" overwrite="false"/> 
+    <file name="ReportConfig.xml" overwrite="false"/> 
+    <file name="ServerConfig.xml" overwrite="true"/> 
+    <file name="MultiLangField.xml" overwrite="false"/> 
+    <file name="CustomSchemaDefinitions.xml" overwrite="false"/> 
+</config> 

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects forbidden-operations="" insert-option="insert" object-state="new" version="2.0">
+	<FIBOBankVoucherHeader xmlns:fixobankvoucherheader="com.lbs.unity.fi.bo.exchange.FIXOBankVoucherHeader">
+		<!--Property: Internal_Reference, Description:LOGICALREF: Mantıksal kayıt numarası-->
+		<Internal_Reference value="147"/>
+		<!--Property: BOStatus, Description:SALEPERSONREF: Satınalma/Satış Elemanı-->
+		<BOStatus value="1"/>
+		<!--Property: SlipDate, Description:SLIPDATE: Fiş tarihi-->
+		<SlipDate value="1549832400000"/>
+		<!--Property: SlipNo, Description:SLIPNR: Fiş numarası-->
+		<SlipNo value="0000000000000004"/>
+		<!--Property: VTCode, Description:VTCODE: Fiş türü kodu-->
+		<VTCode value="04"/>
+		<!--Property: VoucherType, Description:VOUCHERTYPE: Fiş türü-->
+		<VoucherType value="4"/>
+		<!--Property: DNTConstraint, Description:DNTCONSTRAINT: Doküman numarası oluşturma seçeneği (elle, otomatik, öndeğer)-->
+		<DNTConstraint value="1"/>
+		<!--Property: OffsetOption, Description:OFFSETOPTION: Satır işlemi için karşı hesap seçeneği (girilmez, öndeğer, sabit)-->
+		<OffsetOption value="1"/>
+		<!--Property: LCBalanceOption, Description:LCBALANCEOPTION: Ana para birimi için fiş bakiye kontrol seçeneği (bakiye verebilir/veremez)-->
+		<LCBalanceOption value="1"/>
+		<!--Property: GLVchTypeRef, Description:GLVCHTYPEREF: Ana hesap planına ait muhasebe fiş türünün mantıksal kayıt numarası-->
+		<GLVchTypeRef value="38" Code="04" ModuleNr="1" resolver-name="VTCodes" resolve="true"/>
+		<!--Property: Department, Description:DEPTREF: Bölüm kaydı mantıksal kayıt numarası-->
+		<Department value="4" Code="0" FirmRef="2" resolver-name="SourceDP" resolve="true" FirmRef.Companynr="2"/>
+		<!--Property: Division, Description:ORGUNITREF: Organizasyonel birim mantıksal kayıt numarası-->
+		<Division value="16" Code="01.0" FirmRef="2" resolver-name="SourceOU" resolve="true" FirmRef.Companynr="2"/>
+		<!--Property: ModuleNr, Description:MODULENR: Modül numarası (İlgili modulün numarası)-->
+		<ModuleNr value="7"/>
+		<!--Property: Sign, Description:TRANSSIGN: Hareket işareti-->
+		<Sign value="1"/>
+		<!--Property: TotalDebit, Description:DEBIT: Borç-->
+		<TotalDebit value="58867.45000000"/>
+		<!--Property: TotalCredit, Description:CREDIT: Alacak-->
+		<TotalCredit value="58867.45000000"/>
+		<!--Property: TotalDebitRC, Description:DEBITRC: Raporlama para birimi cinsinden borç-->
+		<TotalDebitRC value="58867.45000000"/>
+		<!--Property: TotalCreditRC, Description:CREDITRC: Raporlama para birimi cinsinden alacak-->
+		<TotalCreditRC value="58867.45000000"/>
+		<!--Property: Footnote, Description:GENEXP: Genel açıklama-->
+		<Footnote value="11.02.2019 GÖNDERİLEN HAVALE / EFT /GARANTİ 86-"/>
+		<!--Property: VoucherTypeDef, Description:VOUCHERTYPEDEF: Fiş Türü Açıklaması-->
+		<VoucherTypeDef value="Günlük / Mahsup"/>
+		<!--Property: VTReference, Description:VTREF: Fiş türü mantıksal kayıt numarası-->
+		<VTReference value="57" Code="04" ModuleNr="3" resolve="true"/>
+		<Transactions>
+			<FIBOBankTransaction xmlns:fixobanktransaction="com.lbs.unity.fi.bo.exchange.FIXOBankTransaction">
+				<!--Property: Internal_Reference, Description:LOGICALREF: Mantıksal kayıt numarası-->
+				<Internal_Reference value="325"/>
+				<!--Property: BankRef, Description:BANKREF: Banka mantıksal kayıt numarası-->
+				<BankRef value="3" Code="GRT" resolve="true"/>
+				<!--Property: BnkAccRef, Description:BANKACCOUNTREF: Banka hesabı mantıksal kayıt numarası-->
+				<BnkAccRef value="6" BankRef.Code="GRT" Code="GRT   ANA_1" BankRef="3" resolver-name="BankAccount" resolve="true" AccountType="1"/>
+				<!--Property: CrossAccType, Description:CROSSACCTYPE: Karşı banka hesabı mantıksal kayıt numarası-->
+				<CrossAccType value="1"/>
+				<!--Property: ARPRef, Description:ARPREF: Cari hesap mantıksal kayıt numarası-->
+				<ARPRef value="1870" Code="120.01.1282" resolver-name="ARPInfo" resolve="true"/>
+				<!--Property: GLCrossAccRef, Description:CROSSACCOUNTREF: Karşı muhasebe hesabı mantıksal kayıt numarası-->
+				<GLCrossAccRef value="6165" Code="120.02.503" resolver-name="CrossAccount" resolve="true"/>
+				<!--Property: VoucherType, Description:VOUCHERTYPE: Fiş türü-->
+				<VoucherType value="4" Code="" resolve="true"/>
+				<!--Property: UniqueLineId, Description:UNIQUELINEID: Satır numarası-->
+				<UniqueLineId value="1"/>
+				<!--Property: SourceSlipRef, Description:SOURCESLIPREF: Banka fişi mantıksal kayıt referansı-->
+				<SourceSlipRef value="147" SlipNo="0000000000000004" VTCode="04" resolve="true"/>
+				<!--Property: TransType, Description:TRANSTYPE: Hareket türü-->
+				<TransType value="1001"/>
+				<!--Property: TradeAccType, Description:TRADEACCTYPE: Banka hesap türü (ticari, kredi vs.)-->
+				<TradeAccType value="1"/>
+				<!--Property: SlipDate, Description:TRANSDATE: İşlem tarihi-->
+				<SlipDate value="1549832400000"/>
+				<!--Property: Department, Description:DEPTREF: Bölüm kaydı mantıksal kayıt numarası-->
+				<Department value="4" Code="0" FirmRef="2" resolve="true" FirmRef.Companynr="2"/>
+				<!--Property: Division, Description:ORGUNITREF: Organizasyonel birim mantıksal kayıt numarası-->
+				<Division value="16" Code="01.0" FirmRef="2" resolve="true" FirmRef.Companynr="2"/>
+				<!--Property: Sign, Description:TRANSSIGN: Hareket işareti-->
+				<Sign value="1"/>
+				<!--Property: ModuleNr, Description:MODULENR: Modül numarası (İlgili modulün numarası)-->
+				<ModuleNr value="7"/>
+				<!--Property: LineNr, Description:LINENR: Satır numarası-->
+				<LineNr value="1"/>
+				<!--Property: TransactionNr, Description:TRANSNR: Hareket numarası-->
+				<TransactionNr value="0000000000000004"/>
+				<!--Property: Amount, Description:AMOUNT: Tutar-->
+				<Amount value="58867.45000000"/>
+				<!--Property: RCRate, Description:RCRATE: Raporlama para birimi kuru-->
+				<RCRate value="1.00000000"/>
+				<!--Property: AmountRC, Description:RCNET: Raporlama para birimi cinsinden net tutar-->
+				<AmountRC value="58867.45000000"/>
+				<!--Property: DueDate, Description:TRANSDUEDATE: Hareketin son ödeme tarihi-->
+				<DueDate value="1549832400000"/>
+				<!--Property: BOStatus, Description:BOSTATUS:Durumu(0: Kullanımda 1: Kullanım Dışı)-->
+				<BOStatus value="1"/>
+				<!--Property: FiscalMonth, Description:FISCALMONTH:Toplam ayı-->
+				<FiscalMonth value="2"/>
+				<!--Property: FiscalYear, Description:FISCALYEAR : Toplam yılı-->
+				<FiscalYear value="2019"/>
+				<ADDetailLines/>
+				<Installments>
+					<FIBOPCInstallment xmlns:fixopcinstallment="com.lbs.unity.fi.bo.exchange.FIXOPCInstallment">
+						<!--Property: Internal_Reference, Description:LOGICALREF: Mantıksal kayıt numarası-->
+						<Internal_Reference value="46843"/>
+						<!--Property: DueDate, Description:TRANSDATE: İşlem tarihi-->
+						<DueDate value="1549832400000"/>
+						<!--Property: Module, Description:MODULENR: Modül numarası (3: Sipariş, 4: Fatura,5: Cari hesap fişi, 6: Çek fişi, 7: Banka fişi, 8: SD fişi)-->
+						<Module value="7"/>
+						<!--Property: MasterRef, Description:ARPREF: Cari hesap mantıksal kayıt numarası-->
+						<MasterRef value="1870" Code="120.01.1282" resolver-name="ARPInfo" resolve="true"/>
+						<!--Property: ParentSlipRef, Description:SLIPREF: Fişin mantıksal kayıt numarası-->
+						<ParentSlipRef value="325"/>
+						<!--Property: ParentType, Description:SLIPTYPE: Fiş türü (İlgili modüle ait fiş türü)-->
+						<ParentType value="4"/>
+						<!--Property: DepartmentRef, Description:DEPTREF: Bölüm kaydı mantıksal kayıt numarası-->
+						<DepartmentRef value="4" Code="0" FirmRef="2" resolve="true" FirmRef.Companynr="2"/>
+						<!--Property: OrgUnitRef, Description:ORGUNITREF: Organizasyonel birim mantıksal kayıt numarası-->
+						<OrgUnitRef value="16" Code="01.0" FirmRef="2" resolver-name="SrcOUInfo" resolve="true" FirmRef.Companynr="2"/>
+						<!--Property: Total, Description:TOTAL: Toplam tutar-->
+						<Total value="24426.07000000"/>
+						<!--Property: Paid, Description:PAID: Ödenen tutar-->
+						<Paid value="24426.07000000"/>
+						<!--Property: MatchPCRef, Description:CROSSREF: Kapanan hareketin mantıksal kayıt numarası-->
+						<MatchPCRef value="57742"/>
+						<!--Property: TransactionDate, Description:PROCDATE: İşlem tarihi-->
+						<TransactionDate value="1549832400000"/>
+						<!--Property: TC_Rate, Description:TCRATE: İşlem para birimi kuru-->
+						<TC_Rate value="1.00000000"/>
+						<!--Property: RC_Rate, Description:RCRATE: Raporlama para birimi kuru-->
+						<RC_Rate value="1.00000000"/>
+						<!--Property: TotalOfMatch, Description:CROSSTOTAL: Kapanan hareketin tutarı-->
+						<TotalOfMatch value="24426.07000000"/>
+						<!--Property: ClosingRate, Description:CLOSINGRATE: Kapanan hareketin döviz oranı-->
+						<ClosingRate value="1.00000000"/>
+						<!--Property: DiscountDuedate, Description:DISCDUEDATE: İndirim son tarihi-->
+						<DiscountDuedate value="1549832400000"/>
+						<!--Property: BOStatus, Description:BOSTATUS: Kaydın durumu (0: İşlem Tamamlandı, 1: Bankaya İletilecek, 2: Bankaya İletildi, 3: İşlem Sonuçlandırılamadı, 4: İletilmek İçin Onay Bekliyor, 5: İletilmek için onay aldı, 6: Paketlendi, 7: LDX'e iletildi, 8: Limit Yeterli, 9: Limit Yetersiz)-->
+						<BOStatus value="4"/>
+						<!--Property: BankAccountRef, Description:BANKACCOUNTREF: Banka hesabı mantıksal kayıt numarası-->
+						<BankAccountRef value="6" BankRef.Code="GRT" Code="GRT   ANA_1" BankRef="3" resolver-name="BankAccount" resolve="true" AccountType="1"/>
+						<!--Property: OptDueDate, Description:OPTDATE: İşlem zamanı-->
+						<OptDueDate value="1549832400000"/>
+					</FIBOPCInstallment>
+					<FIBOPCInstallment xmlns:fixopcinstallment="com.lbs.unity.fi.bo.exchange.FIXOPCInstallment">
+						<!--Property: Internal_Reference, Description:LOGICALREF: Mantıksal kayıt numarası-->
+						<Internal_Reference value="57743"/>
+						<!--Property: DueDate, Description:TRANSDATE: İşlem tarihi-->
+						<DueDate value="1549832400000"/>
+						<!--Property: Module, Description:MODULENR: Modül numarası (3: Sipariş, 4: Fatura,5: Cari hesap fişi, 6: Çek fişi, 7: Banka fişi, 8: SD fişi)-->
+						<Module value="7"/>
+						<!--Property: MasterRef, Description:ARPREF: Cari hesap mantıksal kayıt numarası-->
+						<MasterRef value="1870" Code="120.01.1282" resolver-name="ARPInfo" resolve="true"/>
+						<!--Property: ParentSlipRef, Description:SLIPREF: Fişin mantıksal kayıt numarası-->
+						<ParentSlipRef value="325"/>
+						<!--Property: ParentType, Description:SLIPTYPE: Fiş türü (İlgili modüle ait fiş türü)-->
+						<ParentType value="4"/>
+						<!--Property: DepartmentRef, Description:DEPTREF: Bölüm kaydı mantıksal kayıt numarası-->
+						<DepartmentRef value="4" Code="0" FirmRef="2" resolve="true" FirmRef.Companynr="2"/>
+						<!--Property: OrgUnitRef, Description:ORGUNITREF: Organizasyonel birim mantıksal kayıt numarası-->
+						<OrgUnitRef value="16" Code="01.0" FirmRef="2" resolver-name="SrcOUInfo" resolve="true" FirmRef.Companynr="2"/>
+						<!--Property: Total, Description:TOTAL: Toplam tutar-->
+						<Total value="34441.38000000"/>
+						<!--Property: Paid, Description:PAID: Ödenen tutar-->
+						<Paid value="34441.38000000"/>
+						<!--Property: MatchPCRef, Description:CROSSREF: Kapanan hareketin mantıksal kayıt numarası-->
+						<MatchPCRef value="46810"/>
+						<!--Property: TransactionDate, Description:PROCDATE: İşlem tarihi-->
+						<TransactionDate value="1549832400000"/>
+						<!--Property: TC_Rate, Description:TCRATE: İşlem para birimi kuru-->
+						<TC_Rate value="1.00000000"/>
+						<!--Property: RC_Rate, Description:RCRATE: Raporlama para birimi kuru-->
+						<RC_Rate value="1.00000000"/>
+						<!--Property: TotalOfMatch, Description:CROSSTOTAL: Kapanan hareketin tutarı-->
+						<TotalOfMatch value="34441.38000000"/>
+						<!--Property: ClosingRate, Description:CLOSINGRATE: Kapanan hareketin döviz oranı-->
+						<ClosingRate value="1.00000000"/>
+						<!--Property: DiscountDuedate, Description:DISCDUEDATE: İndirim son tarihi-->
+						<DiscountDuedate value="1549832400000"/>
+						<!--Property: BOStatus, Description:BOSTATUS: Kaydın durumu (0: İşlem Tamamlandı, 1: Bankaya İletilecek, 2: Bankaya İletildi, 3: İşlem Sonuçlandırılamadı, 4: İletilmek İçin Onay Bekliyor, 5: İletilmek için onay aldı, 6: Paketlendi, 7: LDX'e iletildi, 8: Limit Yeterli, 9: Limit Yetersiz)-->
+						<BOStatus value="4"/>
+						<!--Property: BankAccountRef, Description:BANKACCOUNTREF: Banka hesabı mantıksal kayıt numarası-->
+						<BankAccountRef value="6" BankRef.Code="GRT" Code="GRT   ANA_1" BankRef="3" resolver-name="BankAccount" resolve="true" AccountType="1"/>
+						<!--Property: OptDueDate, Description:OPTDATE: İşlem zamanı-->
+						<OptDueDate value="1549832400000"/>
+					</FIBOPCInstallment>
+				</Installments>
+			</FIBOBankTransaction>
+		</Transactions>
+	</FIBOBankVoucherHeader>
+</objects>

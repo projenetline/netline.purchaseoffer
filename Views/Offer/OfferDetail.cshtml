@@ -1,0 +1,45 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_OfferDetail>
+
+@{
+    ViewBag.Title = "OfferDetail";
+    Layout = "~/Views/Shared/_RequestLayout.cshtml";
+}
+
+<h2>Teklif Detayları </h2>
+
+<table class="table">
+    <tr>
+        <th>
+Malzeme
+        </th>
+        <th>
+           Miktar
+        </th>
+        <th>
+          Birim
+        </th>
+        <th>
+           Bölge / Adres
+        </th>
+   
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemDesc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Unit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department)
+        </td>
+       
+    </tr>
+}
+
+</table>

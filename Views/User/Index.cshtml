@@ -1,0 +1,68 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_User>
+
+@{
+    ViewBag.Title = "Kullanıcılar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Kullanıcılar</h2>
+
+
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>
+            Kullanıcı Adı
+        </th>
+
+        <th>
+            E-Posta
+        </th>
+        <th>
+            Ad Soyad
+        </th>
+        <th>
+            Kullanıcı Türü
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td style="text-align:center">
+                @if (item.UserType == 1)
+                {
+                    <label style="min-width:50%;display: inline-block;font-size:120%" class="label control-label  label-primary"> Satınalma Kullanıcısı</label>
+                }
+                else if (item.UserType == 5)
+                {
+                    <label style="min-width:50%;display: inline-block;font-size:120%" class="label control-label  label-warning"> Bütçe  Kullanıcısı </label>
+                }
+                else if (item.UserType == 100)
+                {
+                    <label style="min-width:50%;display: inline-block;font-size:120%" class="label control-label  label-danger"> Administrator  </label>
+                }
+                else if (item.UserType == 2)
+                {
+                    <label style="min-width:50%;display: inline-block;font-size:120%" class="label control-label  label-info"> Onay Kullanıcısı  </label>
+                }
+            </td>
+            <td style="text-align:center">
+                @Html.ActionLink("Düzenle", "EditUser", new { Id = item.Id }, new { @class = "btn btn-info " })
+
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.ActionLink("Kullanıcı Ekle", "NewUser", null, new { @class = "btn btn-info " }) 

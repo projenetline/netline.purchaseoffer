@@ -1,0 +1,465 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_Confirm>
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "PurchasingProjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    netline.purchaseoffer.Models.Ntl_Filter filter=(netline.purchaseoffer.Models.Ntl_Filter)Session["Filter"];
+
+    if (filter == null)
+    {
+        filter = new netline.purchaseoffer.Models.Ntl_Filter()
+        {
+            BegDate = DateTime.Today.AddMonths(-1),
+            EndDate = DateTime.Today
+        };
+
+    }
+
+}
+<style>
+    .label {
+        font-size: 12px !important;
+    }
+</style>
+<script type="text/javascript">
+
+        $(document).ready(function() {
+            setInterval(function () {
+    var carClass=false;
+    var classList = document.getElementById('lblWaitingConfirm').className.split(/\s+/);
+
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'label-default') {
+      carClass=true;
+    }
+}
+     if(carClass)
+    {
+
+      $("[name='lblWaitingConfirm']").removeClass("label-default");
+     $("[name='lblWaitingConfirm']").addClass("label-info");
+    }
+    else
+    {
+      $("[name='lblWaitingConfirm']").addClass("label-default");
+       $("[name='lblWaitingConfirm']").removeClass("label-info");
+    }
+
+
+
+            }, 1000);
+        });
+</script>
+
+<h4>Satın Alma Projeleri</h4>
+<label class="control-label col-lg-1" style="margin-top: 10px">Başlangıç Tarihi</label>
+<div class="col-lg-2">
+    <div class="form-group-inner">
+        <div class="row">
+            <div class="date-picker-inner ">
+                <div class="form-group data-custon-pick" id="data_1">
+                    <div class="input-group date col-lg-12">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        @Html.TextBox("begdate", @filter.BegDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<label class="control-label col-lg-1" style="margin-top: 10px">Bitiş Tarihi</label>
+<div class="col-lg-2">
+    <div class="form-group-inner">
+        <div class="row">
+            <div class="date-picker-inner ">
+                <div class="form-group data-custon-pick" id="data_1">
+                    <div class="input-group date col-lg-12">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        @Html.TextBox("enddate", @filter.EndDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<label class="control-label col-lg-1" style="margin-top: 10px">Tedarikçi</label>
+<div class="col-lg-2">
+    <div class="form-group-inner">
+
+        @Html.TextBox("supplier", @filter.Supplier, new { @class = "form-control", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+
+
+    </div>
+</div>
+<div class="col-lg-2">
+    <button class="btn btn-success" onclick="getProjectList()" style="min-width:100%;display: inline-block"><i class="fa fa-list-ol"></i>    Listele</button>
+</div>
+<div class="admintab-area mg-tb-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="admintab-wrap mg-t-30">
+                    <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                        <li class="active">
+                            <a data-toggle="tab" href="#TabWaitingProject"><span class="adminpro-icon adminpro-analytics tab-custon-ic"></span>Onay / Yorum Bekleyenler Projeler</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#TabRejectProject"><span class="adminpro-icon adminpro-analytics tab-custon-ic"></span>Geri Gönderilen Projeler</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#TabContinueProject"><span class="adminpro-icon adminpro-analytics tab-custon-ic"></span>Devam  Eden Projeler</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#TabCompleteProject"><span class="adminpro-icon adminpro-analytics tab-custon-ic"></span>Tamamlanan Projeler</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" style="margin-top:25px">
+                        <div id="TabWaitingProject" class="tab-pane in active  custon-tab-style1">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    @foreach (var item in Model.Where(x => x.ConfirmStatus == 0))
+                                    {<div class="col-lg-12" style="padding-top:6px">
+                                            <div class="col-lg-12" style="border:2px solid gray;padding:5px;border-radius:5px">
+                                                <div class="col-lg-1" style="padding-top:6px">
+
+
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Date_.ToString("dd.MM.yyy") </label>
+                                                </div>
+                                                <div class="col-lg-3" style="padding-top:6px;text-align: left;">
+                                                    @if (item.ConfirmType == 2)
+                                                    {
+                                                        <label class="label label-default" id="lblWaitingConfirm" name="lblWaitingConfirm" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesi için yorumunuz bekliyor.</label>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="label label-default" id="lblWaitingConfirm" name="lblWaitingConfirm" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesi onayınızı bekliyor.</label>
+                                                    }
+                                                </div>
+                                                <div class="col-lg-1" style="padding-top:6px">
+                                                    <label class="label " style="font-size:16px;margin-top:6px"> </label>
+                                                </div>
+                                                @if (item.ConfirmStatus != 0)
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px; text-align: center;">
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px;">@item.ConfirmTime.ToString("dd.MM.yyyy HH:mm") </label>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px">
+                                                        <label class="label " style="font-size:16px;margin-top:6px"> </label>
+                                                    </div>
+                                                }
+
+                                                <div class="col-lg-3" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Supplier </label>
+                                                </div>
+
+                                                <div class="col-lg-1" style="text-align: center;">
+                                                    @if (item.ConfirmType == 1)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm  pull-right" onclick="location.href='@Url.Action("Confirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 2)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm  pull-right" onclick="location.href='@Url.Action("InvoiceConfirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 3)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm pull-right" onclick="location.href='@Url.Action("Comment", "Comment", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="display: inline-block">Proje Detayı</button>
+
+                                                    }
+
+
+                                                </div>
+                                                <div class="col-lg-1" style="">
+                                                    <button class="btn btn-warning btn-sm pull-right" onclick="getHistory(@item.ProjectId)" style="display: inline-block;border-radius:25px">H</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="TabRejectProject" class="tab-pane custon-tab-style1">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    @foreach (var item in Model.Where(x => x.ConfirmStatus > 1 && !x.ProjectStatus.Contains("Onaylandi")))
+                                    {<div class="col-lg-12" style="padding-top:6px">
+                                            <div class="col-lg-12" style="border:2px solid gray;padding:5px;border-radius:5px">
+                                                <div class="col-lg-1" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Date_.ToString("dd.MM.yyy") </label>
+                                                </div>
+                                                <div class="col-lg-3" style="padding-top:6px;text-align: left;">
+                                                    @if (item.ConfirmStatus == 1)
+                                                    {
+                                                        <label class="label label-success" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini onayladınız.</label>
+
+                                                    }
+                                                    else if (item.ConfirmStatus == 2 || item.ConfirmStatus == 3)
+                                                    {
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini geri gönderdiniz.</label>
+
+                                                    }
+
+
+                                                </div>
+                                                <div class="col-lg-2" style="padding-top:6px">
+                                                    <label class="label label-default" style="font-size:16px;margin-top:6px"> @item.ProjectStatus</label>
+                                                </div>
+                                                @if (item.ConfirmStatus != 0)
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px; text-align: center;">
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px;">@item.ConfirmTime.ToString("dd.MM.yyyy HH:mm") </label>
+                                                    </div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px">
+                                                        <label class="label " style="font-size:16px;margin-top:6px"> </label>
+                                                    </div>
+                                                }
+
+                                                <div class="col-lg-2" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Supplier </label>
+                                                </div>
+
+                                                <div class="col-lg-1" style="text-align: center;">
+                                                    @if (item.ConfirmType == 1)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Confirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 2)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("InvoiceConfirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 3)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Comment", "Comment", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                </div>
+                                                <div class="col-lg-1" style="">
+                                                    <button class="btn btn-warning btn-sm pull-right" onclick="getHistory(@item.ProjectId)" style="display: inline-block;border-radius:25px">H</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="TabContinueProject" class="tab-pane custon-tab-style1">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    @foreach (var item in Model.Where(x => x.ConfirmStatus == 1 && !x.ProjectStatus.Contains("Onaylandi")))
+                                    {<div class="col-lg-12" style="padding-top:6px">
+                                            <div class="col-lg-12" style="border:2px solid gray;padding:5px;border-radius:5px">
+                                                <div class="col-lg-1" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Date_.ToString("dd.MM.yyy") </label>
+                                                </div>
+                                                <div class="col-lg-3" style="padding-top:6px;text-align: left;">
+                                                    @if (item.ConfirmStatus == 1)
+                                                    {
+                                                        <label class="label label-success" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini onayladınız.</label>
+
+                                                    }
+                                                    else if (item.ConfirmStatus == 2 || item.ConfirmStatus == 3)
+                                                    {
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini geri gönderdiniz.</label>
+
+                                                    }
+
+
+                                                </div>
+                                                <div class="col-lg-3" style="padding-top:6px">
+                                                    <label class="label label-default" style="font-size:16px;margin-top:6px"> @item.ProjectStatus</label>
+                                                </div>
+                                                @if (item.ConfirmStatus != 0)
+                                                {
+                                                    <div class="col-lg-1" style="padding-top:6px; text-align: center;">
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px;">@item.ConfirmTime.ToString("dd.MM.yyyy HH:mm") </label>
+                                                    </div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-lg-1" style="padding-top:6px">
+                                                        <label class="label " style="font-size:16px;margin-top:6px"> </label>
+                                                    </div>
+                                                }
+
+                                                <div class="col-lg-2" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Supplier </label>
+                                                </div>
+
+                                                <div class="col-lg-1" style="text-align: center;">
+                                                    @if (item.ConfirmType == 1)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Confirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 2)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("InvoiceConfirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 3)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Comment", "Comment", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                </div>
+                                                <div class="col-lg-1" style="">
+                                                    <button class="btn btn-warning btn-sm pull-right" onclick="getHistory(@item.ProjectId)" style="display: inline-block;border-radius:25px">H</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="TabCompleteProject" class="tab-pane custon-tab-style1">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    @foreach (var item in Model.Where(x => x.ConfirmStatus == 1 && x.ProjectStatus.Contains("Onaylandi")))
+                                    {<div class="col-lg-12" style="padding-top:6px">
+                                            <div class="col-lg-12" style="border:2px solid gray;padding:5px;border-radius:5px">
+                                                <div class="col-lg-1" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Date_.ToString("dd.MM.yyy") </label>
+                                                </div>
+                                                <div class="col-lg-3" style="padding-top:6px;text-align: left;">
+                                                    @if (item.ConfirmStatus == 1)
+                                                    {
+                                                        <label class="label label-success" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini onayladınız.</label>
+
+                                                    }
+                                                    else if (item.ConfirmStatus == 2 || item.ConfirmStatus == 3)
+                                                    {
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px">  @item.ProjectNo nolu satın alma projesini geri gönderdiniz.</label>
+
+                                                    }
+
+
+                                                </div>
+                                                <div class="col-lg-2" style="padding-top:6px">
+                                                    <label class="label label-default" style="font-size:16px;margin-top:6px"> @item.ProjectStatus</label>
+                                                </div>
+                                                @if (item.ConfirmStatus != 0)
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px; text-align: center;">
+                                                        <label class="label label-danger" style="font-size:16px;margin-top:6px;">@item.ConfirmTime.ToString("dd.MM.yyyy HH:mm") </label>
+                                                    </div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-lg-2" style="padding-top:6px">
+                                                        <label class="label " style="font-size:16px;margin-top:6px"> </label>
+                                                    </div>
+                                                }
+
+                                                <div class="col-lg-2" style="padding-top:6px">
+                                                    <label class="label label-warning" style="font-size:16px;margin-top:6px">@item.Supplier </label>
+                                                </div>
+
+                                                <div class="col-lg-1" style="text-align: center;">
+                                                    @if (item.ConfirmType == 1)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Confirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 2)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("InvoiceConfirm", "Confirm", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                    else if (item.ConfirmType == 3)
+                                                    {
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Comment", "Comment", new { ConfirmId = item.ConfirmGuid.ToString() })'" style="min-width:100%;display: inline-block">Proje Detayı</button>
+
+                                                    }
+                                                </div>
+                                                <div class="col-lg-1" style="">
+                                                    <button class="btn btn-warning btn-sm pull-right" onclick="getHistory(@item.ProjectId)" style="display: inline-block;border-radius:25px">H</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ModalHistory" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+    <div class="modal-dialog" style="width:1000px">
+        <div class="modal-content">
+            <div class="modal-close-area modal-close-df">
+                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <br />
+                <br />
+                <br />
+                <table class="table table-striped table-bordered" id="requestListTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Onaylayan
+                            </th>
+                            <th>
+                                Tarih
+                            </th>
+                            <th>
+                                Saat
+                            </th>
+                            <th>
+                                Geçen Süre
+                            </th>
+                            <th>
+                                Yapılan İşlem
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody id="HistoryTableBody"></tbody>
+                </table>
+                <br /> <br />
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

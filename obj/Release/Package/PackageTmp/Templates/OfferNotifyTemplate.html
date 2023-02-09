@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <table style="padding:2px; margin-left:20px" border="0">
+        <thead>
+            <tr>
+                <th align="left">Proje No</th>
+                <th>:</th>
+                <th align="left">{projectno}</th>
+                <th width="50%"></th>
+                <th align="left">Proje Sorumlusu</th>
+                <th>:</th>
+                <th align="left">{person}</th>
+            </tr>
+            <tr>
+                <th align="left">Bitiş Tarihi</th>
+                <th>:</th>
+                <th align="left">{enddate}</th>
+                <th width="50%"></th>
+                <th align="left">Telefon</th>
+                <th>:</th>
+                <th align="left">{tel}</th>
+            </tr>
+            <tr>
+                <th align="left"></th>
+                <th></th>
+                <th align="left"></th>
+                <th width="50%"></th>
+                <th align="left">E-Posta</th>
+                <th>:</th>
+                <th align="left">{mail}</th>
+            </tr>
+        </thead>
+    </table>
+    <br />
+    <br />
+    <table style="padding:2px; margin-left:20px" border="1">
+        <thead>
+
+            <tr>
+                <td style="max-width:170px; min-width:170px">Malzeme Açıklaması</td>
+                <td style="max-width:120px; min-width:120px" align="center"> Miktar</td>
+                <td>Birim </td>
+                <td style="max-width:70px; min-width:70px" align="center"> Kdv Hariç Birim Fiyat Giriniz</td>
+                <td>Kdv Oranı %</td>
+                <td style="max-width:70px; min-width:70px" align="center">Kdv Dahil Birim Fiyat</td>
+                {teslimatAdresiLine}
+
+            </tr>
+        </thead>
+        <tbody>
+            {itemlist}
+        </tbody>
+    </table>
+    <br />
+    <b>
+        Açıklama : {aciklama}
+
+    </b>
+    <br />
+    <b>
+        {teslimatAdresi}
+
+    </b>
+
+</body>
+</html>

@@ -1,0 +1,268 @@
+﻿@model netline.purchaseoffer.Models.Ntl_SupplierOrder
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .container {
+        max-width: 820px;
+        margin: 0px auto;
+        margin-top: 50px;
+    }
+
+    .comment {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .commenter {
+        float: left;
+    }
+
+        .commenter img {
+            width: 35px;
+            height: 35px;
+        }
+
+    .comment-text-area {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .textinput {
+        float: left;
+        width: 100%;
+        min-height: 110px;
+        outline: none;
+        resize: none;
+        border: 1px solid grey;
+    }
+
+    .foo {
+    }
+</style>
+<div class="row" style="margin-top: 0px; margin-left: 25px">
+
+    <button data-target="#ModalSendAsOrder" data-toggle="modal" type="button" style="margin-bottom:15px;margin-right:50px" class="btn btn-success pull-right"><i class="fa fa-address-book"></i> Tedarikçiye Gönder</button>
+    <div id="ModalSendAsOrder" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <br />
+                    Sipariş tedarikçiye gönderilecektir.
+                    <br />
+                    Emin misiniz?
+                    <br /> <br />
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-close adminpro-informatio" aria-hidden="true"></i> vazgeç</button>
+                    <a role="button" href="@Url.Action("Index", "Order", new { ProjectId = @Model.ProjectId })" class="btn btn-rounded btn-warning"><i class="fa fa-first-order"></i>  Gönder</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 row">
+        <div class="panel panel-success ">
+            <div class="panel panel-heading">
+                @Html.TextBoxFor(model => @Model.ProjectId, new { @class = "form-control hidden", @type = "text" })
+                <h3>Proje No : @Model.ProjectNr</h3>
+            </div>
+            <div class=" panel-body">
+                <div class="col-lg-6 row">
+
+                    <div class="col-lg-12 row">
+
+
+                        <label class="control-label col-lg-4" style="margin-top: 10px">Teslimat Tarihi</label>
+                        <div class="col-lg-8 row">
+                            <div class="date-picker-inner ">
+                                <div class=" data-custon-pick" id="data_1">
+                                    <div class="input-group date col-lg-12">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBoxFor(model => Model.DueDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @style = "font-weight: bold;max-width:259px;font-size:12px !Important" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 row">
+                        @Html.TextBoxFor(model => @Model.SupplierRef, new { @class = "form-control hidden", @type = "text" })
+                        <label class="control-label col-lg-4" style="margin-top: 10px">Tedarikçi Kodu</label>
+                        <div class="col-lg-8 row">
+                            @Html.TextBoxFor(model => model.SupplierCode, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important" })
+                        </div>
+
+                    </div>
+                    <div class="col-lg-12 row">
+
+
+                        <label class="control-label col-lg-4" style="margin-top: 10px">Tedarikçi Unvanı</label>
+                        <div class="col-lg-8 row">
+                            @Html.TextBoxFor(model => model.SupplierDesc, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:450px;font-size:12px !Important" })
+                        </div>
+                    </div>
+                    <div class="col-lg-12 row">
+                        <label class="control-label col-lg-4" style="margin-top: 10px">Net Toplam</label>
+                        <div class="col-lg-8 row">
+                            @Html.TextBoxFor(model => model.NetTotal, "{0:N2} TL", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important; text-align:right" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 row">
+                    <div class="form-group-inner">
+                        <div class="row comment">
+                            <label>Açıklama</label>
+                            <div class="form-group-inner">
+
+                            </div>
+                            @Html.TextAreaFor(model => Model.Explanation, new { @class = "form-control textinput" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-12 row">
+        <div class="panel panel-info ">
+            <div class="panel panel-heading">
+
+                <h3>Ürünler</h3>
+            </div>
+            <div class="panel-body">
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="30%">Malzeme Adı </th>
+                            <th width="10%" style="text-align:right">Miktar</th>
+                            <th width="10%">Birim</th>
+                            <th width="10%" style="text-align:right">Birim Fiyat</th>
+                            <th width="10%">Döviz Türü</th>
+                            <th width="10%" style="text-align:right">KDV (%)</th>
+                            <th width="10%" style="text-align:right">Net Toplam (TL)</th>
+                            <th width="10%">Bölge / Adres</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Lines)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(model => item.ItemDesc, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+                                </td>
+                                <td style="text-align:right">
+                                    @Html.TextBoxFor(model => item.Quantity, "{0:N0}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:right" })
+
+
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => item.Unit, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+                                </td>
+                                <td style="text-align:right">
+                                    @Html.TextBoxFor(model => item.Price, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:right" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => item.TrCurr, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+                                </td>
+                                <td style="text-align:right">
+                                    @Html.TextBoxFor(model => item.VatRate, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:right" })
+
+
+                                </td>
+
+
+                                <td style="text-align:right">
+                                    @Html.TextBoxFor(model => item.NetTotal, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:right" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => item.Department, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 row">
+        <div class="panel panel-warning ">
+            <div class="panel panel-heading">
+                <h3>Dokümanlar</h3>
+
+            </div>
+            <div class="multi-uploaded-area mg-tb-15" style="margin-top:25px;">
+                <div class="row">
+
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="dropzone-pro">
+                            <div id="dropzone">
+                                <form action="/upload" class="dropzone dropzone-custom needsclick" id="demo-upload">
+                                    <div class="dz-message needsclick download-custom">
+                                        <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                                        <h2>Yüklenecek dosyaları sürükleyin yada buraya tıklayınız..</h2>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <table width="100%" border="1" id="OrderDocumentTable">
+                            <thead>
+
+                            </thead>
+                            <tbody id="OrderDocumentTableBody">
+                                @for (int i = 0; i < Model.DocList.Count; i++)
+                                {
+
+
+                                    <tr>
+
+
+                                        <td width="35%">@Model.DocList[i].UploadedFileName
+                                        <td width="30%">
+                                            @Html.TextBoxFor(model => @Model.DocList[i].Id, new { @class = "form-control hidden", @type = "number" })
+                                            @Html.TextBoxFor(model => @Model.DocList[i].DocumentName, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important;" })
+                                        </td>
+
+                                        <td width="18%">
+                                            <a role="button" onclick="openAWindow('Order/FileView?DocumentId=@Model.DocList[i].Id', 'Doküman Ön İzleme' , 920, 640, true)" style="height:20px; padding:2px" class="btn btn-info"><i class="fa fa-street-view"> </i> İncele</a>
+
+                                        </td>
+
+                                        <td width="17%">
+                                            <a role="button" onclick="SaveOrderDocumentName('@i')" style="height:20px; padding:2px" class="btn btn-success"><i class="fa fa-save"> </i> Kaydet</a>
+
+                                        </td>
+                                        <td width="10%">
+                                            <a role="button" onclick="DeleteOrderDocument('@i')" style="height:20px; padding:2px" class="btn btn-danger"><i class="fa fa-remove"></i> Sil</a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

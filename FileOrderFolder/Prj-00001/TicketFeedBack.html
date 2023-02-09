@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .container {
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
+
+        body {
+            margin: 0px;
+          
+            background-repeat: no-repeat;
+            background: white;
+            background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#dad2c2));
+            background: -moz-linear-gradient(top, ##ffffff, #dad2c2);
+            filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='##dad2c2');
+        }
+
+        #masterWrapper {
+            background-color: white;
+            width: 100%;
+            height: 935px;
+            margin: auto auto auto auto;
+            /*border: solid 3px #0d916c;*/
+            border-radius: 10px;
+            text-align: center;
+            vertical-align: top;
+            position: relative;
+            background-image: linear-gradient(to bottom,white,#dad2c2)
+        }
+
+        #header {
+            width: 105%;
+            margin: auto 0 auto 0;
+            height: 70px;
+            background-color: #0c4da2;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        #footer {
+            /*position: absolute;*/
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            vertical-align: text-bottom;
+        }
+
+            #footer img {
+                width: 99.8%;
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+            }
+
+        #logoFrame img {
+            margin-top: 0px;
+            width: 450px;
+            height: 250px;
+        }
+
+        #middle {
+            position: absolute;
+            top: 250px;
+        }
+
+            #middle label {
+                font-family: "Titillium Web", sans-serif;
+                color: #0d916c;
+                font-weight: bold;
+                font-size: 19px;
+                text-shadow: 1px 1px white;
+                padding: 10px;
+            }
+
+        .btn-success {
+            background-color: #0d916c !important;
+        }
+
+            .btn-success:hover {
+                background-color: #0c4da2 !important;
+            }
+
+        #middle a {
+            color: white;
+            font-weight: bold;
+            font-family: "Titillium Web", sans-serif;
+            font-size: 23px;
+            width: 300px;
+            height: 80px;
+            padding-top: 25px;
+            border-radius: 8px;
+            border: solid 1px white;
+        }
+
+        #middle div label {
+            font-size: 16px;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body style="margin: 0px;background-color:white">
+    <div id="header" style="  width: 105%;  margin: auto 0 auto 0;   height: 70px;  background-color: #EB2027;   border-top-left-radius: 6px;  border-top-right-radius: 6px;">
+
+    </div>
+    <div class="container" style="text-align:center;">
+
+        <div id="masterWrapper">
+            <div id="logoFrame">
+                <img src="RaySigortaMailİmzası-02.png" />
+            </div>
+            <div id="middle">
+                <label>
+                    {TicketDate} tarihinde yapılan, {TicketNo} numaralı destek işlemi ile ilgili;
+                </label>
+                <br />
+                <br />
+
+                <label>
+                    Tarafınıza daha iyi hizmet verebilmek ve destek ekibimizin performansını ölçümlemek adına aşağıdaki bağlantıdan değerlendirme yapmanızı rica ederiz.
+                </label>
+                <br />
+
+                <a  href="{feedBackLink}">
+                    <img src="cid:{evaluateId}" />
+                    <br />
+                </a>
+              
+                <br />
+
+                <div>
+                    <label>
+                        <td>Konu </td>
+                        <td>:</td>
+                        <td>{Title}</td>
+                    </label>
+                    <br />
+                    <label>
+                        <td>Kayıt Durumu </td>
+                        <td>:</td>
+                        <td>{State}</td>
+                    </label>
+                    <br />
+                    <label>
+                        NETLINE BİLGİ İŞLEM
+                    </label>
+                    <br />
+                    <label>
+                        <td>
+                            BİLGİSAYAR DONANIM VE PROGRAM HİZMETLERİ TİC. LTD. ŞTİ.
+
+                        </td>
+                    </label>
+                    <br />
+                    <label>
+                        <td colspan="3" style="font-family:Calibri">
+                            Tel : 0 (212) 210 52 50&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </td>
+                    </label>
+                    <label>
+                        <td colspan="3" style="font-family:Calibri">
+                            Tel : 0 (212) 220 50 40&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </td>
+                    </label>
+                    <label>
+                        <td colspan="3" style="font-family:Calibri">
+                            Faks : 0 (212) 210 60 44
+
+                        </td>
+                    </label>
+                    <br />
+                    <label>
+                        <td colspan="3" style="font-family:Calibri">
+                            www.netline.net.tr&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </td>
+                    </label>
+                    <label>
+                        <td colspan="3" style="font-family:Calibri">
+                            info@netline.net.tr
+
+                        </td>
+                    </label>
+                    <div id="footer">
+                        <img style="width:1107px; height:277px;" src="cid:{picId}" usemap="#image-map" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <map name="image-map">
+        <area target="_blank" alt="Netline Instagram" title="Netline Instagram" href="https://www.instagram.com/netlinebilgiislem/" coords="533,182,491,226" shape="rect">
+        <area target="_blank" alt="Netline Facebook" title="Netline Facebook" href="https://www.facebook.com/netlinebilgislem/" coords="614,182,571,226" shape="rect">
+        <area target="_blank" alt="Netline Linkedin" title="Netline Linkedin" href="https://tr.linkedin.com/in/netline-bilgi-i%C5%9Flem-ltd-%C5%9Fti-53b3827b" coords="696,182,653,225" shape="rect">
+        <area target="_blank" alt="Netline Youtube" title="Netline Youtube" href="https://www.youtube.com/channel/UCxT-2fOBJvDedGbVBN_YOiA" coords="778,181,735,225" shape="rect">
+    </map>
+</body>
+</html>

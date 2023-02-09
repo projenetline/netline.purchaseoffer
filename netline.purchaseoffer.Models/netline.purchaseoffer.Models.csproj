@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9897A409-503E-4A43-819D-70FA833345AC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>netline.purchaseoffer.Models</RootNamespace>
+    <AssemblyName>netline.purchaseoffer.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BudgetModels\Ntl_BudgetTransfer.cs" />
+    <Compile Include="jP_Global.cs" />
+    <Compile Include="jP_MMTransItem.cs" />
+    <Compile Include="jP_OfferSlip.cs" />
+    <Compile Include="jP_OrderItem.cs" />
+    <Compile Include="Ntl_ConfirmHistory.cs" />
+    <Compile Include="Ntl_Filter.cs" />
+    <Compile Include="Ntl_Payplan.cs" />
+    <Compile Include="Ntl_ProjectStatus.cs" />
+    <Compile Include="Ntl_Talep_Detay.cs" />
+    <Compile Include="Ntl_Anly.cs" />
+    <Compile Include="Ntl_BrowserOffer.cs" />
+    <Compile Include="Ntl_BudgetControl.cs" />
+    <Compile Include="Ntl_BudgetReturn.cs" />
+    <Compile Include="Ntl_Comment.cs" />
+    <Compile Include="Ntl_Confirm.cs" />
+    <Compile Include="Ntl_ConfirmList.cs" />
+    <Compile Include="Ntl_Currency.cs" />
+    <Compile Include="Ntl_Demands.cs" />
+    <Compile Include="Ntl_ItemInfo.cs" />
+    <Compile Include="Ntl_Offer.cs" />
+    <Compile Include="Ntl_Order.cs" />
+    <Compile Include="Ntl_PersonInfo.cs" />
+    <Compile Include="Ntl_Request.cs" />
+    <Compile Include="Ntl_SelectValue.cs" />
+    <Compile Include="Ntl_SupplierOffer.cs" />
+    <Compile Include="Ntl_SupplierOrder.cs" />
+    <Compile Include="Ntl_User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

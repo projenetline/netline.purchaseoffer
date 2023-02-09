@@ -1,0 +1,140 @@
+﻿@model Model.clsOrder
+@{
+    ViewBag.Title = "Sipariş";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    Model.clsPayment payment = new Model.clsPayment();
+    payment.OrderId = Model.OrderId;
+}
+<div class="table-reponsive">
+    <div class="panel-body">
+        <div class="row">
+            <div class="breadcrumb-line">
+                <ul class="breadcrumb">
+                    <li>Sipariş Ödeme ve Sevkiyat</li>
+                </ul>
+
+                <div class="visible-xs breadcrumb-toggle">
+                    <a class="btn btn-link btn-lg " data-toggle="collapse" data-target=".breadcrumb-buttons">
+                        <i class="icon-menu2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row nissRow" style="height:60px">
+            <img src="~/Content/images/Logo/Baylar_Logo.png" alt="Baylar Promosyon" style="width:150px; height:40px;margin-top:10px" />
+        </div>
+        <table class="table dataTable table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Ürün Adı
+                    </th>
+                    <th>
+                        Miktar
+                    </th>
+                    <th style="width: 150px;">
+                        Birim Fiyat
+                    </th>
+                    <th>
+                        Tutar
+                    </th>
+                </tr>
+            </thead>
+            @foreach (Model.clsLine line in Model.lines)
+            {
+                <tr>
+                    <td>
+                        @line.ItemName
+                    </td>
+                    <td>
+                        @line.Amount
+                    </td>
+                    <td>
+                        @line.Price
+                    </td>
+                    <td>
+                        @line.Total
+                    </td>
+                </tr>
+            }
+        </table>
+        <table class="table dataTable  table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 60%">
+                    </th>
+                    <th>
+                        Ara Toplam
+                    </th>
+                    <th>
+                        :
+                    </th>
+                    <td>
+                        @Model.Total TL
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 60%">
+                    </th>
+                    <th>
+                        Toplam İndirim
+                    </th>
+                    <th>
+                        :
+                    </th>
+                    <td>
+                        @Model.DiscAmount TL
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 60%">
+                    </td>
+                    <th>
+                        Kdv
+                    </th>
+                    <th>
+                        :
+                    </th>
+                    <td>
+                        @Model.TotalVat TL
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 60%">
+                    </th>
+                    <th>
+                        Tutar
+                    </th>
+                    <th>
+                        :
+                    </th>
+                    <td>
+                        @Model.GrandTotal TL
+                    </td>
+                </tr>
+            </thead>
+        </table>
+        <div class="row  ">
+            <div class="block minH320">
+               
+                <form action="@Url.Action("Payment", "Payment", new { @OrderId = Model.OrderId })" role="form" method="post">
+
+                    <div class="form-actions text-right">
+                        <a href="@Url.Action("Index", "WaitingOrders")" class="btn btn-primary">&nbsp;&nbsp;Geri&nbsp;&nbsp;</a>
+                        <button type="button" class="btn btn-success buttonMargin" onclick="saveOrderToLogo(@Model.OrderId)">
+                            <i class="icon-download"></i>Siparişi Tamamla&nbsp&nbsp
+                        </button>
+
+
+                        @*
+                        <a href="@Url.Action("Index", "Payment", new { @OrderId = Model.OrderId, @PaymentType = Model.PaymentType })"  class="btn btn-success" >
+                                                   &nbsp;&nbsp;İleri&nbsp;&nbsp;</a>*@
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

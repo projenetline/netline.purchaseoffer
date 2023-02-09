@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <table width="1200px" style="margin-left:100px">
+
+        <tr style="background-color:#dff0d8">
+            <td colspan="3" style="padding-left:10px"  width="100%">
+                <h3 style="color:#3e713f">Proje No : {ProjeNo}</h3>
+            </td>
+
+        </tr>
+        <tr style="height:50px">
+            <td colspan="2" width="50%"></td>
+            <td style="vertical-align:bottom" width="50%">Açıklama</td>
+        </tr>
+        <tr style="height:30px">
+            <td width="25%">
+                Teslimat Tarihi :
+            </td>
+            <td width="25%">
+                {DueDate}
+            </td>
+            <td width="50%" rowspan="4" style="border: 1px solid black;vertical-align:top">
+                {Explantion}
+            </td>
+        </tr>
+        <tr style="height:30px">
+            <td width="25%">
+                Tedarikçi Kodu :
+            </td>
+            <td width="25%">
+                {SupplierCode}
+            </td>
+
+        </tr>
+        <tr style="height:30px">
+            <td width="25%">
+                Tedarikçi Unvanı :
+            </td>
+            <td width="25%">
+                {SupplierName}
+            </td>
+
+        </tr>
+        <tr style="height:30px">
+            <td width="25%">
+               Kdv Dahil Toplam Tutar :
+            </td>
+            <td width="25%">
+                {NetTotal}
+            </td>
+
+        </tr>
+    </table>
+    <table width="1200px" style="margin-left:100px">
+        <thead>
+            <tr style="background-color:#d9edf7">
+                <th colspan="8" style="padding-left:10px">
+                    <h3 style="color:#31708f">Ürünler</h3>
+                </th>
+
+            </tr>
+            <tr style="height:50px">
+                <th colspan="8"></th>
+            </tr>
+            <tr style="height:30px">
+                <th width="30%"  style="text-align:left;border-bottom:1px solid lightgray">Malzeme Adı </th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">Miktar</th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">Birim</th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">Birim Fiyat</th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">Döviz Türü</th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">KDV (%)</th>
+                <th width="10%" style="text-align:center;border-bottom:1px solid lightgray">Kdv Dahil Net Toplam (TL)</th>
+                <th width="10%" style="text-align: center;border-bottom:1px solid lightgray ">Bölge / Adres</th>
+            </tr>
+        </thead>
+        <tbody>
+            {ItemList}
+
+          
+        </tbody>
+    </table>
+    
+</body>
+</html>

@@ -1,0 +1,31 @@
+Sub ComboFilterItem(ctrl as String, ID as Integer, index as Integer, hide as Integer)
+    if ((ctrl = "grdOffer") AND (ID = 10004)) then
+       rwl = MGridRow("grdOffer")
+       GetCellInt("grdOffer", rwl, 10001, crdTypL)
+       GetCellFloat("grdOffer", rwl, 10011, crdRefL)
+       if (crdRefL > 0) then
+          tblUnitSetLL = Application.GetTableName(131, Application.CompanyId, Application.FiscPerdId)
+          Str(crdRefL, strcrdRefL)
+          Str(index, strindex)
+          CreateQuery(QryU)
+          if (crdTypL = 4) then
+             tblCrdL = Application.GetTableName(2, Application.CompanyId, Application.FiscPerdId)
+             SqlStrL = "SELECT USL.LOGICALREF FROM " + tblUnitSetLL + " USL, " + tblCrdL + " SRVC WHERE (USL.UNITSETREF = SRVC.UNITSETREF) AND (SRVC.LOGICALREF = " + strcrdRefL + ") AND (USL.LOGICALREF = " + strindex + ")"
+          Else
+             tblCrdL = Application.GetTableName(1, Application.CompanyId, Application.FiscPerdId)
+             SqlStrL = "SELECT USL.LOGICALREF FROM " + tblUnitSetLL + " USL, " + tblCrdL + " I WHERE (USL.UNITSETREF = I.UNITSETREF) AND (I.LOGICALREF = " + strcrdRefL + ") AND (USL.LOGICALREF = " + strindex + ")"
+          End if
+          QryU.SetSQLText(SqlStrL)
+          QryU.ExecuteDirect()
+          resL = QryU.First()
+          if (resL = 1) then
+             Hide = 0
+          Else
+             Hide = 1
+          End if
+       Else
+          Hide = 1
+       End if
+       InvalidateGrid("grdOffer")
+    End if
+End Sub

@@ -1,0 +1,198 @@
+﻿@model netline.purchaseoffer.Models.Ntl_SupplierOffer
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    
+    ViewBag.Title = "Teklif Ön İzleme";
+    Layout = "~/Views/Shared/_RequestLayout.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        getSupplier();
+        $("#search_SupplierCode").keyup(function (e) {
+            getSupplier();
+        });
+        $("#search_SupplierDesc").keyup(function (e) {
+            getSupplier();
+        });
+
+    $( "[id*='NewPrice']" ).change(function() {
+
+
+   var rowNr = $(this).attr('id').replace('Lines_','');
+    rowNr = rowNr.replace('__NewPrice','');
+
+    setPriceWithTax(rowNr);
+
+});
+
+        $("#isDeliveryAddress").change(function () {
+            if ($(this).is(":checked")) {
+                $('#DeliveryAddress').removeAttr('readonly');
+
+            }
+            else {
+                $('#DeliveryAddress').attr('readonly', 'readonly');
+            }
+        });
+
+
+
+
+    });
+
+</script>
+    <div class="col-lg-12">
+
+        <div class="row" style="margin-top: 0px; margin-left: 25px">
+            <div class="col-lg-12 row">
+                @Html.TextBoxFor(model => @Model.ProjectId, new { @class = "form-control hidden", @type = "text" })
+                @Html.TextBoxFor(model => @Model.RequestGuid, new { @class = "form-control hidden", @type = "text" })
+                <label class="control-label col-lg-1" style="margin-top: 10px">Proje No</label>
+                <div class="col-lg-3 row">
+                    @Html.TextBoxFor(model => model.ProjectNr, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                </div>
+                <label class="control-label col-lg-1" style="margin-top: 10px">İhale Bitiş Tarihi</label>
+                <div class="col-lg-3 row">
+                    @Html.TextBoxFor(model => Model.EndDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @readonly = "readonly", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                </div>
+                <div class="col-lg-4 row pull-right">
+                    @Html.Raw(ViewBag.ProjectResp)
+
+                </div>
+                    
+                </div>
+                <br />
+
+            </div>
+        <br />
+        <table id="OfferLineTable" style="padding:2px; margin-left:20px" border="1">
+            <thead>
+                <tr>
+
+                    <td style="max-width:170px; min-width:170px">Malzeme Açıklaması</td>
+                    <td style="max-width:120px; min-width:120px" align="center"> Miktar</td>
+                    <td>Birim </td>
+
+                    @for (int j = 0; j < Model.Lines[0].OfferList.Count; j++)
+                    {
+                        <td style="max-width:70px; min-width:70px" align="center"> @Model.Lines[0].OfferList[j].OfferTime.ToString("dd.MM.yyyy HH:mm")</td>
+
+                    }
+                    @if (Model.Responded==0)
+                    {
+                        <td style="max-width:70px; min-width:70px" align="center"> Kdv Hariç Birim Fiyat Giriniz</td>
+                        <td>Kdv Oranı %</td>
+                        <td>Kdv Dahil Birim Fiyat</td>
+                    }
+
+                    <td style="max-width:320px; min-width:320px">Açıklama Giriniz</td>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @for (int i = 0; i < Model.Lines.Count; i++)
+                {
+
+                    <tr>
+                        @Html.TextBoxFor(model => @Model.Lines[i].ItemRef, new { @class = "form-control hidden", @type = "text" })
+                        @Html.TextBoxFor(model => @Model.Lines[i].Id, new { @class = "form-control hidden", @type = "text" })
+
+
+
+                        <td>
+                            @Html.TextBoxFor(model => @Model.Lines[i].ItemDesc, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(model => @Model.Lines[i].Quantity, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => @Model.Lines[i].Unit, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                        </td>
+
+                        @for (int j = 0; j < Model.Lines[i].OfferList.Count; j++)
+                        {
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].OfferList[j].Price, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important ; text-align:right" })
+                            </td>
+                        }
+                        @if (Model.Responded==0)
+                        {
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].NewPrice, "{0:N2}", new { @readonly = "readonly", @name = "NewPrice", @class = "form-control", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].VatRate, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].NewPriceWithVat, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                        }
+                        <td>
+                            @if (Model.Responded==0)
+                            {
+                                @Html.TextBoxFor(model => @Model.Lines[i].Explanation, new { @readonly = "readonly", @class = "form-control", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => @Model.Lines[i].Explanation, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                            }
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br />
+
+
+
+        <div class="col-lg-12">
+
+            <div class="col-lg-6">
+                <div class="form-group-inner">
+                    <div class="row">
+
+                        <label>Açıklama</label>
+
+                        @Html.TextAreaFor(model => Model.Explanation, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <table width="100%" border="1" id="SelectSupplierTable">
+                    <tr>
+                        <td colspan="3" align="center">Dökümanlar</td>
+
+                    </tr>
+                    @foreach (var doc in Model.files)
+                    {
+                        <tr>
+                            <td>@doc.DocumentName</td>
+                            <td>@doc.UploadedFileName</td>
+
+                            <td>
+                                <a role="button" onclick="openAWindow('Demands/FileView?DocumentId=@doc.Id', 'Doküman İzleme' , 920, 640, true)" class="btn btn-info"><i class="icon-print2"></i>Görüntüle </a>
+
+                            </td>
+                        </tr>
+                    }
+
+
+
+                </table>
+            </div>
+            <div class="col-lg-3 row" style="margin-top: 50px">
+                <a role="button" onclick="openAWindow('Demands/OfferDetailView?ProjectId=@Model.ProjectId', 'Teklif Adresi' , 920, 640, true)" class="btn btn-info"><i class="fa fa-edit"></i> Teslimat Adresi</a>
+
+            </div>
+        </div>
+       
+    </div>
