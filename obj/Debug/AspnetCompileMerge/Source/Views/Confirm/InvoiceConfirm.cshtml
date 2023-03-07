@@ -1,0 +1,133 @@
+﻿@model netline.purchaseoffer.Models.Ntl_BrowserOffer
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "InvoiceConfirm";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    string guid=Request.QueryString["ConfirmId"];
+}
+<style>
+    .container {
+        max-width: 820px;
+        margin: 0px auto;
+        margin-top: 50px;
+    }
+
+    .comment {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .commenter {
+        float: left;
+    }
+
+        .commenter img {
+            width: 35px;
+            height: 35px;
+        }
+
+    .comment-text-area {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .textinput {
+        float: left;
+        width: 100%;
+        min-height: 75px;
+        outline: none;
+        resize: none;
+        border: 1px solid grey;
+    }
+
+    .foo {
+    }
+</style>
+<div class="col-md-6">
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Proje No :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.ProjectNr, new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:left" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Sipariş No :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.OrderInfo.OrderNr, new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:left" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Fatura No :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.InvInfo.InvoiceNr, new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:left" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Sipariş Tutarı :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.OrderInfo.OrderNetTotal, "{0:N2}", new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Fatura Tutarı :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.InvInfo.InvoiceNetTotal, "{0:N2}", new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Fark :</label>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.Difference, "{0:N2}", new { @class = "form-control ", @style = "font-weight: bold;font-size:12px !Important;text-align:right" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            <label class=" col-lg-2" style="text-align:right">Açıklama :</label>
+            <div class="col-md-5 comment">
+                @Html.TextAreaFor(model => model.Explanation, new { @style = "@width:100%;background-color:White", @class = "textinput" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group ">
+            
+            <a data-target="#ModalConfirm" style="margin-top:10px; margin-left:5px"  data-toggle="modal" type="button"  href="#" class="btn btn-rounded  btn-warning pull-right"><i class="fa fa-check adminpro-informatio" aria-hidden="true"></i> Onayla</a>
+
+            @*<button type="button" style="margin-top:10px; margin-left:5px" class="btn btn-warning pull-right"><i class="fa fa-check adminpro-informatio"></i>Onaya Gönder </button>*@
+            <div id="ModalConfirm" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                        <div class="modal-body comment">
+                            <br />
+                            Onaylamak istiyor musunuz?
+                            <br /> <br />
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" onclick="confirmInvoice('@guid')" style="margin-top:10px; margin-left:5px" class="btn btn-info pull-right"><i class="fa fa-check adminpro-informatio"></i>Onayla </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,126 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_BrowserOffer>
+@{
+    ViewBag.Title = "Bekleyen Teklifler";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Dictionary<string, string> ProjectWaitinOrder= new Dictionary<string, string>();
+            ProjectWaitinOrder.Add("PrjNo", "");
+            ProjectWaitinOrder.Add("ProjectStatus", "");
+
+            if (Session["ProjectWaitinOrder"] != null)
+            {
+                ProjectWaitinOrder = (Dictionary<string, string>)Session["ProjectWaitinOrder"];
+            }
+}
+<div class="col-lg-12">
+    <table id="projectListTable" class="table table-striped table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    @Html.TextBox("txtSearch_PrjNo", @ProjectWaitinOrder["PrjNo"], new { @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important", @placeholder = " Ara" ,@onchange = "ChangedStatusWaitingOrder()" })
+                </th>
+                <th ></th>
+                <th>
+                    @Html.DropDownList("drpStatusList", new SelectList(ViewBag.drpStatusList, "Value", "Text", "0"), "Seçiniz", new { @class = "form-control", @style = "font-weight: bold !Important;", @onchange = "ChangedStatusWaitingOrder()", @Value = "0" })
+                </th>
+                <th colspan="3"></th>
+            </tr>
+            <tr>
+                <th width="15%">
+                    Proje No
+                </th>
+                <th width="15%">
+                    İhale Bitiş Tarihi
+                </th>
+                <th width="25%">
+                    Durumu
+                </th>
+                <th width="35%">
+                    Tedarikçi
+                </th>
+                <th width="5%">
+
+                </th>
+                <th width="5%">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int rowNr=0;}
+            @foreach (var item in Model)
+            {
+
+                <tr id="rowNr_@rowNr">
+                    <td>
+                        @Html.TextBoxFor(model => item.ProjectNr, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+
+                    </td>
+                    <td>
+
+                        @Html.TextBoxFor(model => item.EndDate, "{0:dd.MM.yyyy}", new { @readonly = "readonly", @class = "form-control", @style = "font-weight: bold;font-size:12px !Important" })
+                    </td>
+
+                    <td>
+                        @Html.TextBoxFor(model => item.Status_, new { @Id = "Status_" + rowNr, @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => item.Supplier.SupplierDesc, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+
+                    </td>
+                    <td>
+                        <a type="button" style="margin-top:0px;" href="@Url.Action("Confirm", "Demands" , new { ProjectId = item.ProjectId})" class="btn btn-rounded  btn-info"><i class="fa fa-edit adminpro-informatio" aria-hidden="true"></i> Detay</a>
+                    </td>
+                    <td>
+
+                        <button class="btn btn-warning btn-sm pull-right" onclick="getHistory(@item.ProjectId)" style="display: inline-block;border-radius:25px">H</button>
+                    </td>
+                </tr>
+                rowNr++;
+            }
+        </tbody>
+    </table>
+</div>
+@Html.Raw(ViewBag.Pagination)
+
+<div id="ModalHistory" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+    <div class="modal-dialog" style="width:1000px">
+        <div class="modal-content">
+            <div class="modal-close-area modal-close-df">
+                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <br />
+                <br />
+                <br />
+                <table class="table table-striped table-bordered" id="requestListTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Onaylayan
+                            </th>
+                            <th>
+                                Tarih
+                            </th>
+                            <th>
+                                Saat
+                            </th>
+                            <th>
+                                Geçen Süre
+                            </th>
+                            <th>
+                                Yapılan İşlem
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody id="HistoryTableBody"></tbody>
+                </table>
+                <br /> <br />
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>

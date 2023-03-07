@@ -1,0 +1,413 @@
+﻿@model netline.purchaseoffer.Models.Ntl_SupplierOffer
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "Teklif Ver";
+    Layout = "~/Views/Shared/_RequestLayout.cshtml";
+
+    DateTime date = Model.EndDate.Add(Model.EndTime);
+
+}
+
+<style>
+    .container {
+        max-width: 820px;
+        margin: 0px auto;
+        margin-top: 50px;
+    }
+
+    .comment {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .commenter {
+        float: left;
+    }
+
+        .commenter img {
+            width: 35px;
+            height: 35px;
+        }
+
+    .comment-text-area {
+        float: left;
+        width: 100%;
+        height: auto;
+    }
+
+    .textinput {
+        float: left;
+        width: 100%;
+        min-height: 75px;
+        outline: none;
+        resize: none;
+        border: 1px solid grey;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    getCurrency();
+
+        getSupplier();
+        $("#search_SupplierCode").keyup(function (e) {
+            getSupplier();
+        });
+        $("#search_SupplierDesc").keyup(function (e) {
+            getSupplier();
+        });
+
+    $( "[id*='NewPrice']" ).change(function() {
+   var rowNr = $(this).attr('id').replace('Lines_','');
+    rowNr = rowNr.replace('__NewPrice','');
+    setPriceWithTax(rowNr);
+
+});
+
+        $("#isDeliveryAddress").change(function () {
+            if ($(this).is(":checked")) {
+                $('#DeliveryAddress').removeAttr('readonly');
+
+            }
+            else {
+                $('#DeliveryAddress').attr('readonly', 'readonly');
+            }
+        });
+
+
+
+
+    });
+
+</script>
+
+
+
+@using (Html.BeginForm("OfferGet", "Offer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="col-lg-12">
+
+
+
+
+        <div class="row" style="margin-top: 0px; margin-left: 25px">
+
+            @if (date < DateTime.Now)
+            {<div class="col-lg-12 row" style="margin-bottom: 20px;">
+                    <div class="col-lg-4 row"></div>
+                    <div class="col-lg-4">
+                        @Html.TextBox("txtTestDate", "İhale Süreci Sona Ermiştir.", new { @class = "form-control ", @type = "text", @style = "width:100%;font-size:36px;color:Red;text-align:center" })
+                    </div>
+                </div>
+            }
+
+
+            <div class="col-lg-12 row">
+                @Html.TextBoxFor(model => @Model.ProjectId, new { @class = "form-control hidden", @type = "text" })
+                @Html.TextBoxFor(model => @Model.RequestGuid, new { @class = "form-control hidden", @type = "text" })
+
+                <label class="control-label col-lg-1" style="margin-top: 10px">Proje No</label>
+                <div class="col-lg-2 row">
+                    @Html.TextBoxFor(model => model.ProjectNr, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                </div>
+                <label class="control-label col-lg-1" style="margin-top: 10px">İhale Bitiş Tarihi</label>
+                <div class="col-lg-2 row">
+                    @Html.TextBoxFor(model => Model.EndDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @readonly = "readonly", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                </div>
+                <label class="control-label col-lg-1" style="margin-top: 10px">İhale Bitiş Tarihi</label>
+                <div class="col-lg-2 row">
+                    @Html.TextBoxFor(model => Model.EndTime, "{0:hh\\:mm}", new { @class = "form-control", @readonly = "readonly", @style = "font-weight: bold;max-width:150px;font-size:12px !Important", @type = "time" })
+                </div>
+                <div class="col-lg-3">
+                    <table class="table table-no-bordered" style="padding:2px; margin-left:20px">
+
+                        <tr>
+                            <td style="padding-top:15px;font-size:large;font-weight:bold">Dolar</td>
+
+                            <td>
+                                @Html.TextBox("txtUsdCurr", "00,00", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+
+                            <td style="padding-top:15px;font-size:large;font-weight:bold">Euro</td>
+
+                            <td>
+                                @Html.TextBox("txtEurCurr", "00,00", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="font-size:x-small">Merkez Bankası Döviz Satış Kuru baz alınmaktadır. </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="col-lg-8"></div>
+                <div class="col-lg-4 row pull-right">
+                    @Html.Raw(ViewBag.ProjectResp)
+
+                </div>
+            </div>
+            <br />
+
+        </div>
+        <br />
+
+        <table id="OfferLineTable" style="padding:2px; margin-left:20px" border="1">
+            <thead>
+                <tr>
+
+                    <td style="max-width:200px; min-width:170px">Malzeme Açıklaması</td>
+                    <td style="max-width:120px; min-width:120px" align="center"> Miktar</td>
+                    <td>Birim </td>
+
+
+                    @for (int j = 0; j < Model.Lines[0].OfferList.Count; j++)
+                    {
+
+                        <td style="max-width:70px; min-width:70px" align="center"> @Model.Lines[0].OfferList[j].OfferTime.ToString("dd.MM.yyyy HH:mm")</td>
+
+                    }
+                    @if (Model.Responded == 0 && date < DateTime.Now)
+                    {
+                        <td>Döviz Türü </td>
+                        <td style="max-width:70px; min-width:70px" align="center"> Kdv Hariç Birim Fiyat Giriniz</td>
+                        <td>Kdv Oranı %</td>
+                        <td>Kdv Dahil Birim Fiyat</td>
+                        <td>Kdv Dahil Toplam Fiyat (TL)</td>
+                    }
+
+                    <td style="max-width:320px; min-width:320px">Açıklama Giriniz</td>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @for (int i = 0; i < Model.Lines.Count; i++)
+                {
+
+                    <tr>
+                        @Html.TextBoxFor(model => @Model.Lines[i].ItemRef, new { @class = "form-control hidden", @type = "text" })
+                        @Html.TextBoxFor(model => @Model.Lines[i].Id, new { @class = "form-control hidden", @type = "text" })
+
+
+
+                        <td>
+                            @Html.TextBoxFor(model => @Model.Lines[i].ItemDesc, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                        </td>
+                        <td align="right">
+                            @Html.TextBoxFor(model => @Model.Lines[i].Quantity, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => @Model.Lines[i].Unit, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                        </td>
+
+
+                        @for (int j = 0; j < Model.Lines[i].OfferList.Count; j++)
+                        {
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].OfferList[j].Price, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important ; text-align:right" })
+                            </td>
+                        }
+                        @if (Model.Responded == 0 && date > DateTime.Now)
+                        {
+                            <td>
+                                @Html.DropDownListFor(model => model.Lines[i].TrCurr, new SelectList(ViewBag.trcurList, "Value", "Text", Model.Lines[i].TrCurr), "Seçiniz", new { @class = "form-control", @value = Model.Lines[i].TrCurr, @style = "padding:0;font-weight: bold;font-size:12px !Important;width:100% !important", @onchange = "setPriceWithTax(" + i + ");" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].NewPrice, "{0:N2}", new { @name = "NewPrice", @class = "form-control", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].VatRate, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].NewPriceWithVat, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                            <td align="right">
+                                @Html.TextBoxFor(model => @Model.Lines[i].NetTotalWithTax, "{0:N2}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                            </td>
+                        }
+                        <td>
+                            @if (Model.Responded == 0 && date > DateTime.Now)
+                            {
+                                @Html.TextBoxFor(model => @Model.Lines[i].Explanation, new { @class = "form-control", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => @Model.Lines[i].Explanation, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important" })
+                            }
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br />
+
+
+        <div class="col-lg-12">
+            <div class="col-lg-6"></div>
+            <div class="col-lg-3">
+                <table class="table table-no-bordered" style="padding:2px; margin-left:20px">
+
+                    <tr>
+                        <td style="padding-top:15px;font-size:large;font-weight:bold">Toplam Tutar (TL)</td>
+
+                        <td>
+                            @Html.TextBox("txtSubTotal", "00,00", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;width:100% !important; text-align:right" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-2">
+                <a role="button" onclick="openAWindow('Offer/OfferDetailView?ProjectId=@Model.ProjectId', 'Teklif Adresi' , 920, 640, true)" class="btn btn-info pull-right"><i class="fa fa-edit"></i> Teslimat Adresi</a>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-12">
+
+            <div class="col-lg-5">
+
+                <div class="row comment">
+
+                    <label>Açıklama</label>
+
+                    @Html.TextAreaFor(model => Model.Explanation, new { @class = "form-control textinput", @readonly = "readonly" })
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+
+        <div class="col-lg-12" style="margin-top:20px">
+
+
+            <div class="col-lg-5">
+                <div class="row" style="border:1px solid gray">
+                    <table width="80%" border="0" id="SelectSupplierTable" class="table table-striped">
+                        <tr>
+                            <td colspan="3" style="font-weight:bolder;font-size:24px" align="center">Dökümanlar</td>
+
+                        </tr>
+                        @foreach (var doc in Model.files)
+                        {
+                            <tr>
+                                <td style="font-weight:bold">@doc.DocumentName</td>
+                                <td style="font-weight:bold">@doc.UploadedFileName</td>
+
+                                <td>
+                                    <a role="button" onclick="openAWindow('Offer/FileView?DocumentId=@doc.Id', 'Doküman İzleme' , 920, 640, true)" class="btn btn-info pull-right"><i class="icon-print2"></i>Görüntüle </a>
+
+                                </td>
+                            </tr>
+                        }
+
+
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+        @if (Model.Responded == 0 && date > DateTime.Now)
+        {
+            <div class="form-group">
+                <div class="col-md-12" style="margin-bottom:20px">
+
+                    <div class="col-md-9"></div>
+                    <div class="col-md-3">
+                        <span style="color:red; text-align:center;"><strong> @ViewBag.ErrorMessage</strong></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-8"></div>
+                    <div class=" col-md-2">
+                        <button data-target="#ModalWithForOffer" data-toggle="modal" style="float:right" class="btn btn-info"><i class="fa fa-send adminpro-informatio" aria-hidden="true"></i> Teklif Ver</button>
+
+                    </div>
+                    <div class=" col-md-2">
+                        <button data-target="#ModalWithoutForOffer" data-toggle="modal" style="float:left" class="btn btn-danger"><i class="fa fa-close adminpro-informatio" aria-hidden="true"></i> Teklif Verme</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+    </div>
+
+    <div id="ModalWithoutForOffer" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <div class="form-group-inner">
+                        <div class="row comment">
+                            <label>Açıklama Giriniz</label>
+                            <div class="form-group-inner">
+
+                            </div>
+                            Teklif süreciniz teklif vermeden sonlandırılacaktır. Onaylıyor musunuz ?
+                            @Html.TextAreaFor(model => Model.NotResponseExplanation, new { @class = "form-control textinput" })
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Vazgeç</button>
+                    <button type="submit" class="btn btn-info"><i class="fa fa-save adminpro-informatio" aria-hidden="true"></i>  Evet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ModalWithForOffer" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <div class="modal-body">
+
+
+                        <label>Teklif gönderilecektir. Emin misiniz?</label>
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+
+                    <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Vazgeç</button>
+                    <button type="submit" name="command" value="saveWithForOffer" class="btn btn-info"><i class="fa fa-send adminpro-informatio" aria-hidden="true"></i>  Gönder</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

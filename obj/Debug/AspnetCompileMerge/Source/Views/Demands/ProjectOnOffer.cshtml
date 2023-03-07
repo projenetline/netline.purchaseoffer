@@ -1,0 +1,82 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_BrowserOffer>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+@{
+    ViewBag.Title = "Teklifteki Projeler";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+
+
+}
+
+<table class="table table-striped table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>
+                Proje No
+            </th>
+            <th>
+                İhale Bitiş Tarihi
+            </th>
+            <th>
+                İhale Bitiş Saati
+            </th>
+            <th>
+                Durumu
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+
+            <th>
+                @Html.TextBox("txtSearch_PrjNo", "", new { @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important", @placeholder = " Ara" })
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+                @Html.TextBox("txtSearch_Status", "", new { @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important", @placeholder = " Ara" })
+            </th>
+            <th></th>
+
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => item.ProjectNr, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important" })
+
+            </td>
+            <td>
+
+                @Html.TextBoxFor(model => item.EndDate, "{0:dd.MM.yyyy}", new { @readonly = "readonly", @class = "form-control", @style = "font-weight: bold;max-width:259px;font-size:12px !Important" })
+            </td>
+            <td>
+
+                @Html.TextBoxFor(model => item.EndTime, "{0:hh\\:mm}", new { @readonly = "readonly", @class = "form-control", @style = "font-weight: bold;max-width:259px;font-size:12px !Important" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => item.Status_, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;max-width:300px;font-size:12px !Important" })
+
+            </td>
+            <td>
+                @if (item.SuggestionSupplierRef > 0)
+                {
+                    <a type="button" style="margin-top:0px;" href="@Url.Action("Confirm", "Demands", new { ProjectId = item.ProjectId })" class="btn btn-rounded  btn-info"><i class="fa fa-edit adminpro-informatio" aria-hidden="true"></i> Detay</a>
+
+                }
+                else
+                {
+                    <a type="button" style="margin-top:0px;" href="@Url.Action("WaitingOffer", "Demands", new { ProjectId = item.ProjectId ,typ =1})" class="btn btn-rounded  btn-info"><i class="fa fa-edit adminpro-informatio" aria-hidden="true"></i> Detay</a>
+                }
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+@Html.Raw(ViewBag.Pagination)

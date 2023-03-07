@@ -30,3 +30,10 @@ C:\Projelerim\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netli
 C:\Projelerim\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.csproj.CopyComplete
 C:\Projelerim\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.dll
 C:\Projelerim\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.pdb
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\bin\Debug\netline.purchaseoffer.Models.dll
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\bin\Debug\netline.purchaseoffer.Models.pdb
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.csproj.AssemblyReference.cache
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.csproj.CoreCompileInputs.cache
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.csproj.CopyComplete
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.dll
+C:\Users\1\OneDrive\Belgeler\GitHub\netline.purchaseoffer\netline.purchaseoffer.Models\obj\Debug\netline.purchaseoffer.Models.pdb

@@ -1,0 +1,145 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.BudgetModels.Ntl_BudgetTransfer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<p>
+
+    <a role="button" href="@Url.Action("NewTransfer", "Budget")" style="padding:2px" class="btn btn-warning"><i class="fa fa-list-ol"></i>Transfer Fişi Oluştur</a>
+</p>
+<table class="table table-responsive table-bordered">
+    <tr>
+        <th align="center">
+            Transfer No
+        </th>
+        <th align="center">
+            Transfer Tarihi
+        </th>
+        <th align="center" style="text-align:center">
+            Transfer Türü
+        </th>
+        <th align="center" style="text-align:center">
+            Transfer Ayı
+        </th>
+        <th align="center" style="text-align:right">
+            Transfer Tutarı
+        </th>
+        <th align="center" style="text-align:center">
+            Transfer Durumu
+        </th>
+        <th align="center"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        string transferMonth="";
+        string className="";
+        switch (item.TransferMonth)
+        {
+            case 1:
+                transferMonth = "Ocak"; className = "success"; break;
+            case 2:
+                transferMonth = "Şubat"; className = "primary"; break;
+            case 3:
+                transferMonth = "Mart"; className = "info"; break;
+            case 4:
+                transferMonth = "Nisan"; className = "warning"; break;
+            case 5:
+                transferMonth = "Mayıs"; className = "danger"; break;
+            case 6:
+                transferMonth = "Haziran"; className = "success"; break;
+            case 7:
+                transferMonth = "Temmuz"; className = "primary"; break;
+            case 8:
+                transferMonth = "Ağustos"; className = "info"; break;
+            case 9:
+                transferMonth = "Eylül"; className = "warning"; break;
+            case 10:
+                transferMonth = "Ekim"; className = "danger"; break;
+            case 11:
+                transferMonth = "Kasım"; className = "success"; break;
+            case 12:
+                transferMonth = "Aralık"; className = "primary"; break;
+            default:
+                break;
+        }
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransferNo)
+            </td>
+            <td>
+                @item.TransferDate.ToShortDateString()
+            </td>
+            <td align="center">
+                @if (item.TransferType == 1)
+                {
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-primary"> Yıllık </label>
+
+                }
+                else
+                {
+
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-warning"> Aylık </label>
+                }
+
+            </td>
+            <td align="center">
+                <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label  label-@className"> @transferMonth </label>
+
+            </td>
+            <td align="right">
+                @item.TotalAmountFrom.ToString("N2")
+            </td>
+            <td align="center">
+                @if (!item.Transfered && item.SendedConfirm)
+                {
+
+                    @*if (item.HasConfirmed && item.HasRejected)
+                        {
+                            <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-info"> Onaylanan Transferler </label>
+                            <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-danger"> Geri Gön. Transferler </label>
+                        }
+                        else if (item.HasRejected)
+                        {
+                            <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-danger"> Geri Gön. Transferler </label>
+
+                        }
+                        else if (item.HasConfirmed)
+                        {
+                            <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-info"> Onaylanan Transferler </label>
+                        }
+                        else
+                        {
+                            <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-warning"> Onay Bekleniyor </label>
+                        }*@
+
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-primary"> Kayıt Edildi </label>
+                }
+                else if (!item.SendedConfirm && !item.Transfered)
+                {
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-primary"> Kayıt Edildi </label>
+
+                }
+
+                else if (item.Transfered && !item.Locked)
+                {
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-success"> Transfer Yapıldı </label>
+                }
+                else if (!item.Transfered && item.Locked)
+                {
+                    <label style="min-width:100%;display: inline-block;font-size:120%" class="label control-label label-primary"> Kilitlendi </label>
+                }
+
+            </td>
+            <td align="center">
+                @Html.ActionLink("Detay", "Transfer", new { id = item.Id }, new { @class = "btn btn-info", @style = "min-width:100%;display: inline-block" })
+
+            </td>
+        </tr>
+    }
+
+</table>

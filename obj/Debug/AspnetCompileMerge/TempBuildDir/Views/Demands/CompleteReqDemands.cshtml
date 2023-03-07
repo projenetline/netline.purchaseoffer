@@ -1,0 +1,69 @@
+﻿@model IEnumerable<netline.purchaseoffer.Models.Ntl_BrwsrTalep>
+
+@{
+    ViewBag.Title = "Tamamlanan İhtiyaç Talep Detayı";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            Talep No
+        </th>
+        <th>
+            Tarih
+        </th>
+        <th>
+            Satın Alma Oluşturan
+        </th>
+        <th>
+            Toplam Ürün Sayısı
+        </th>
+        <th>
+            Toplam Talep Miktarı
+        </th>
+        <th>
+            Toplam Satınalma Miktarı
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            
+            @Html.TextBoxFor(model => item.DemandNr, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:left" })
+
+        </td>
+        <td>
+         
+            @Html.TextBoxFor(model => item.Date_, "{0:dd.MM.yyyy}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:left" })
+
+        </td>
+        <td>
+        
+            @Html.TextBoxFor(model => item.CreatedBy, new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:left" })
+
+        </td>
+        <td>
+        
+            @Html.TextBoxFor(model => item.UrunSayisi, "{0:N0}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important;text-align:center" })
+        </td>
+        <td>
+        
+            @Html.TextBoxFor(model => item.ToplamTalepMiktari, "{0:N0}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:center" })
+        </td>
+        <td>
+           
+            @Html.TextBoxFor(model => item.ToplamSatinAlmaMiktari, "{0:N0}", new { @class = "form-control", @readonly = "readonly", @type = "text", @style = "font-weight: bold;font-size:12px !Important; text-align:center" })
+        </td>
+        <td>
+
+            @Html.ActionLink("Detay", "CompleteReqDemandsDetail", new { DemandNr = item.DemandNr } ,new { @class="btn btn-warning pull-right" })
+
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,403 @@
+﻿@model netline.purchaseoffer.Models.BudgetModels.Ntl_BudgetTransfer
+<link href="~/Content/css/modals.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Transfer Fişi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    table {
+        white-space: normal !important;
+    }
+
+    td {
+        word-wrap: break-word;
+    }
+
+    th {
+        word-wrap: break-word;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input[type='text']").change(function () {
+            $('#btnDoTransfer').attr('disabled', true);
+
+        });
+
+
+    });
+    function pressedCalculate() {
+        $('#btnDoTransfer').attr('disabled', true);
+    }
+</script>
+@using (Html.BeginForm("NewTransfer", "Budget", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row" style="margin-top: 0px; margin-left: 25px">
+        <div class="col-lg-12 row">
+            @Html.TextBoxFor(model => model.Id, new { @class = "form-control hidden", @type = "text" })
+            <label class="control-label col-lg-1" style="margin-top: 0px">Fiş No</label>
+            <div class="col-lg-3 row">
+                @Html.TextBoxFor(model => model.TransferNo, new { @readonly = "readonly", @class = "form-control ", @type = "text", @style = "font-weight: bold;font-size:12px !Important" })
+            </div>
+            <label class="control-label col-lg-1" style="margin-top: 0px">Fiş Tarihi</label>
+            <div class="col-lg-4">
+                <div class="form-group-inner">
+                    <div class="row">
+
+
+                        <div class="date-picker-inner ">
+                            <div class="form-group data-custon-pick" id="data_1">
+                                <div class="input-group date col-lg-4">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    @Html.TextBoxFor(model => model.TransferDate, "{0:dd.MM.yyyy}", new { @class = "form-control", @style = "font-weight: bold;max-width:150px;font-size:12px !Important" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <a type="button" href="@Url.Action("Index", "Budget")" class="btn btn-default pull-right"><i class="fa fa-list adminpro-informatio"></i>  Transfer Listesi </a>
+
+
+            </div>
+        </div>
+        <div class="col-lg-12 row">
+            @Html.TextBoxFor(model => model.Id, new { @class = "form-control hidden", @type = "text" })
+            <label class="control-label col-lg-1" style="margin-top: 0px">Transfer Türü</label>
+            <div class="col-lg-3 row">
+                @Html.DropDownListFor(model => model.TransferType, new SelectList(ViewBag.transferTypelist, "Value", "Text"), "Seçiniz", new { @class = "form-control", @style = "font-weight: bold !Important;", @onchange = "ChangedTransferType()" })
+            </div>
+
+            <label class="control-label col-lg-1" style="margin-top: 0px">Transfer Ayı</label>
+            <div class="col-lg-3 row">
+                @Html.DropDownListFor(model => model.TransferMonth, new SelectList(ViewBag.transferMonthlist, "Value", "Text"), "Seçiniz", new { @class = "form-control", @style = "font-weight: bold !Important;", @onchange = "ChangedTransferMonth()" })
+            </div>
+        </div>
+        <br />
+
+    </div>
+    <br />
+
+    <table style="padding:2px;width:100%" border="1" id="budgetTable">
+        <thead>
+            <tr>
+                <th colspan="8" style="font-size:24px;text-align:center" align="center">  Transfer Yapılan Bütçe Kalemi </th>
+                <th></th>
+                <th colspan="7" style="font-size:24px;text-align:center" align="center">  Transfer Edilecek Bütçe Kalemi </th>
+            </tr>
+            <tr>
+                <th style="text-align:center;width:1%">  S.       </th>
+                <th style="text-align:center;width:6%">  Trasnfer Ayı     </th>
+                <th style="text-align:center;width:12%"> Hesap          </th>
+                <th style="text-align:center;width:12%">  Bölüm       </th>
+                <th style="text-align:center;width:12%">  Departman         </th>
+                <th style="text-align:center;width:7%"> Tutar     </th>
+                <th style="text-align:center;width:1%">    </th>
+                <th style="text-align:center;width:6%">  Trasnfer Ayı     </th>
+                <th style="text-align:center;width:12%">  Hesap         </th>
+                <th style="text-align:center;width:12%">  Bölüm    </th>
+                <th style="text-align:center;width:12%">  Departman         </th>
+                <th style="text-align:center;width:7%"> Tutar     </th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+            @{ int i=0;}
+
+            @foreach (var Line in Model.Lines)
+            {
+
+
+                <tr>
+
+                    <td>
+                        @Html.TextBoxFor(model => model.Lines[i].Id, new { @class = "form-control hidden", @type = "text" })
+                        @Html.TextBoxFor(model => model.Lines[i].LineNr, "{0:N0}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;text-align:center;padding:0", @readonly = "readonly" })
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferMonthFrom_" + @i, Model.Lines[i].TransferMonthFrom, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferAccountFrom_" + @i, Model.Lines[i].AccountNameFrom, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferCostCenterFrom_" + @i, Model.Lines[i].BranchFrom, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferDepatmentFrom_" + @i, Model.Lines[i].DepartmentFrom, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+                    <td style="display:none">
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferAmountFrom_" + @i, Model.Lines[i].AmountFromStr, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+
+                    <td>
+                        <button data-target="#ModalBudgetTransferLine_@i" data-toggle="modal" type="button" role="button" style="margin-bottom:0px" class="btn btn-rounded btn-primary "><i class="fa fa-edit"></i> </button>
+                        <div id="ModalBudgetTransferLine_@i" class="modal modal-adminpro-general Customwidth-popup-WarningModal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="width:920px;">
+                                    <div class="modal-close-area modal-close-df">
+                                        <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="panel " style="padding:5px;margin-top:25px;">
+
+                                            <div class="col-lg-12">
+                                                <div class="panel panel-danger " style="padding:5px;margin-top:25px;height:290px">
+                                                    <div class="panel-heading">
+                                                        <h5>Transfer Yapılan</h5>
+
+                                                    </div>
+
+                                                    <hr />
+                                                    <div class="row">
+
+                                                        <div class="col-lg-12">
+
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Transfer Ayı</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].TransferMonthFrom, new SelectList(ViewBag.transferMonthlist, "Value", "Text", Model.Lines[i].TransferMonthFrom), "chosen-select", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectTrasnferMonthFrom(" + @i + ")" })
+                                                                </div>
+                                                                <hr style="margin:3px" />
+                                                                <div class="form-group-inner ">
+                                                                    <label>Departman</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].DepartmentFrom, new SelectList(Model.Lines[i].DepartmentFromlist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important", @value = Model.Lines[i].DepartmentFrom })
+                                                                </div>
+                                                                <hr style="margin:3px" />
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Masraf Yeri</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].BranchFrom, new SelectList(Model.Lines[i].CostCnterFromlist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important", @onchange = "SelectCostCenterFrom(" + @i + ")", @value = Model.Lines[i].BranchFrom })
+                                                                </div> <hr style="margin:3px" />
+
+                                                                <div class="form-group-inner ">
+                                                                    <label>Hesap Kodu</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].AccountNameFrom, new SelectList(Model.Lines[i].accountCodeFromlist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @onchange = "SelectAccountName(" + @i + ")", @style = "font-weight: bold !Important;", @title = Model.Lines[i].AccountNameFrom })
+                                                                </div> <hr style="margin:3px" />
+
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Bölüm</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].CostCenterFrom, new SelectList(Model.Lines[i].BranchFromlist, "Value", "Text", Model.Lines[i].CostCenterFrom), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important", @onchange = "SelectBranchFrom(" + @i + ")", @value = Model.Lines[i].CostCenterFrom })
+
+                                                                </div>  <hr style="margin:3px" />
+                                                                <div class="form-group-inner ">
+                                                                    <label>Hesap Adı</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].AccountFrom, new SelectList(Model.Lines[i].accountNameFromlist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @onchange = "SelectAccount(" + @i + ")", @style = "font-weight: bold !Important;", @value = Model.Lines[i].AccountFrom })
+                                                                </div>  <hr style="margin:3px" />
+
+
+
+
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Transfer Tutarı</label>
+                                                                @Html.TextBoxFor(model => model.Lines[i].AmountFromStr, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;text-align:right ", @onchange = "ChangedAmountFrom(" + @i + ")", @Value = @Model.Lines[i].AmountFromStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Kalan Bütçe</label>
+                                                                @Html.TextBoxFor(model => model.Lines[i].BudgetFromStr, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;text-align:center ", @readonly = "readonly", @value = Model.Lines[i].BudgetFromStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Yeni Bütçe</label>
+                                                                @Html.TextBox("txtNewBudgetFrom_" + @i, "", "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:center", @readonly = "readonly", @value = Model.Lines[i].BudgetToStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="panel panel-danger " style="padding:5px;margin-top:25px;height:290px">
+                                                    <div class="panel-heading">
+                                                        <h5>Transfer Edilecek</h5>
+
+                                                    </div>
+                                                    <hr />
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Transfer Ayı</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].TransferMonthTo, new SelectList(ViewBag.transferMonthlist, "Value", "Text", Model.Lines[i].TransferMonthTo), "chosen-select", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectTrasnferMonthTo(" + @i + ")" })
+                                                                </div>  <hr style="margin:3px" />
+                                                                <div class="form-group-inner ">
+                                                                    <label>Departman</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].DepartmentTo, new SelectList(Model.Lines[i].DepartmentTolist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @value = Model.Lines[i].DepartmentTo })
+                                                                </div> <hr style="margin:3px" />
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Masraf Yeri</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].BranchTo, new SelectList(Model.Lines[i].CostCnterTolist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectCostCenterTo(" + @i + ")", @value = Model.Lines[i].BranchTo })
+                                                                </div>  <hr style="margin:3px" />
+                                                                <div class="form-group-inner ">
+                                                                    <label>Hesap Kodu</label>
+                                                                    @Html.DropDownListFor(model => @Model.Lines[i].AccountNameTo, new SelectList(Model.Lines[i].accountCodeTolist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectAccountNameTo(" + @i + ")", @value = Model.Lines[i].AccountNameTo })
+                                                                </div>  <hr style="margin:3px" />
+
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group-inner ">
+                                                                    <label>Bölüm</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].CostCenterTo, new SelectList(Model.Lines[i].BranchTolist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectBranchTo(" + @i + ")", @value = Model.Lines[i].CostCenterTo })
+                                                                </div> <hr style="margin:3px" />
+                                                                <div class="form-group-inner ">
+                                                                    <label>Hesap Adı</label>
+                                                                    @Html.DropDownListFor(model => model.Lines[i].AccountTo, new SelectList(Model.Lines[i].accountNameTolist, "Value", "Text"), "Seçiniz", new { @class = "chosen-select", @style = "font-weight: bold !Important;", @onchange = "SelectAccountTo(" + @i + ")", @value = Model.Lines[i].AccountTo })
+                                                                </div>  <hr style="margin:3px" />
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Transfer Tutarı</label>
+                                                                @Html.TextBoxFor(model => model.Lines[i].AmountToStr, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:right ", @onchange = "ChangedAmountTo(" + @i + ")", @Value = @Model.Lines[i].AmountToStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Kalan Bütçe</label>
+                                                                @Html.TextBoxFor(model => model.Lines[i].BudgetToStr, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:center", @readonly = "readonly", @value = Model.Lines[i].BudgetToStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group-inner ">
+                                                                <label style="text-align:center;width:100%">Yeni Bütçe</label>
+                                                                @Html.TextBox("txtNewBudgetTo_" + @i, "", "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:center", @readonly = "readonly", @value = Model.Lines[i].BudgetToStr })
+
+                                                            </div>
+                                                            <hr style="margin:3px" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" class="btn btn-rounded  btn-warning"><i class="fa fa-backward adminpro-informatio" aria-hidden="true"></i> Vazgeç</button>
+                                            <button data-dismiss="modal" class="btn btn-rounded  btn-danger"><i class="fa fa-trash adminpro-informatio" aria-hidden="true"></i> Sil</button>
+                                            <button type="button" style="margin-top:0px; " onclick="setTransferValues(@i)" class="btn btn-rounded  btn-primary "><i class="fa fa-file-text-o adminpro-informatio" aria-hidden="true"></i> Tamam</button>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </td>
+
+
+                    <td>
+                        @Html.TextBox("txtTransferMonthTo_" + @i, Model.Lines[i].TransferMonthTo, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferAccountTo_" + @i, Model.Lines[i].AccountNameTo, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferCostCenterTo_" + @i, Model.Lines[i].BranchTo, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferDepatmentTo_" + @i, Model.Lines[i].DepartmentTo, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+                    <td style="display:none">
+                    </td>
+                    <td>
+                        @Html.TextBox("txtTransferAmountTo_" + @i, Model.Lines[i].AmountToStr, new { @class = "form-control ", @readonly = "readonly", @style = "font-weight: bold;font-size:12px !Important;text-align:center;background-color:transparent" })
+
+                    </td>
+
+
+
+                </tr>
+
+
+
+                i++;
+            }
+            <tr>
+                <td colspan="5" style="font-size:18px;text-align:center"> Toplam Tutar</td>
+                <td>
+                    @Html.TextBoxFor(model => model.TotalAmountFrom, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:right", @readonly = "readonly", @value = Model.TotalAmountFrom })
+                </td>
+
+                <td></td>
+                <td colspan="4" style="font-size:18px;text-align:center"> Toplam Tutar </td>
+                <td>
+                    @Html.TextBoxFor(model => model.TotalAmountTo, "{0:N2}", new { @class = "form-control", @type = "text", @style = "font-weight: bold !Important;font-size:12px !Important;text-align:right", @readonly = "readonly", @value = Model.TotalAmountTo })
+                </td>
+
+            </tr>
+        </tbody>
+
+
+    </table>
+    <div class="form-group">
+
+        <div class="col-md-offset-9 col-md-3 pull-right" style="margin-top:25px;margin-bottom:25px">
+
+
+
+            <div class="pull-right">
+
+                @if (Model.Id > 0)
+                {
+                    @*<button onclick="sendRequest()" type="button" class="btn btn-danger"><i class="fa fa-lock adminpro-informatio"></i> Kilitle</button>*@
+
+                }
+                <button type="submit" name="command" onclick="pressedCalculate()" value="CalculateBudget" class="btn btn-warning"><i class="fa fa-calculator adminpro-informatio"></i> Hesapla</button>
+                @if (Model.TotalAmountFrom == Model.TotalAmountTo)
+                {
+                    @*<a href="@Url.Action("DoTransfer", "Budget",new { @Id=Model.Id })" id="btnDoTransfer" type="button" class="btn btn-success"><i class="fa fa-arrow-circle-o-up adminpro-informatio"></i> Transfer Yap </a>*@
+                    <button type="submit" name="command" value="SaveBudget" id="saveBudget" class="btn btn-info"><i class="fa fa-save adminpro-informatio"></i>Kaydet </button>
+                }
+            </div>
+        </div>
+    </div>
+}
+
